@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "playground"
+  ],
+  "scripts": {
+    "dev": "cd playground && yarn dev"
+  },
+  "packageManager": "yarn@4.0.2"
+}

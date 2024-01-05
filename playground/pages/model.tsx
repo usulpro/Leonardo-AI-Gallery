@@ -1,3 +1,4 @@
+// File path: playground/pages/model.tsx
 
 import React, { useState } from 'react';
 // Importing the API methods from the src/model directory
@@ -5,7 +6,7 @@ import { fetchUserInfo, fetchGenerationsByUserId } from 'leonardo-ai-gallery';
 
 const ModelPage = () => {
     // State for storing input values and API responses
-    const [token, setToken] = useState('8a69e018-5e1c-440e-b22e-7e98f5d82b25'); // Token state
+    const token = process.env.NEXT_PUBLIC_LEONARDO_API_TOKEN;
     const [userId, setUserId] = useState(''); // User ID state
     const [offset, setOffset] = useState(0); // Offset state
     const [limit, setLimit] = useState(10); // Limit state

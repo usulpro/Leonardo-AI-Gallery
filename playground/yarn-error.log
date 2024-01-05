@@ -1,0 +1,63 @@
+Arguments: 
+  /home/usul/.nvm/versions/node/v20.8.1/bin/node /home/usul/.nvm/versions/node/v16.14.2/bin/yarn
+
+PATH: 
+  /home/usul/.nvm/versions/node/v20.8.1/bin:/home/usul/.nvm/versions/node/v20.8.1/bin:/home/usul/.nvm/versions/node/v16.14.2/bin:/home/usul/bin:/home/usul/.local/scripts:/home/usul/.local/share:/usr/local/bin:/home/usul/.nvm/versions/node/v16.14.2/bin:/usr/local/sbin:/home/usul/.nvm/versions/node/v20.8.1/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  20.8.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/leonardo-ai-gallery: Not found
+      at params.callback [as _callback] (/home/usul/.nvm/versions/node/v16.14.2/lib/node_modules/yarn/lib/cli.js:66145:18)
+      at self.callback (/home/usul/.nvm/versions/node/v16.14.2/lib/node_modules/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:514:28)
+      at Request.<anonymous> (/home/usul/.nvm/versions/node/v16.14.2/lib/node_modules/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:514:28)
+      at IncomingMessage.<anonymous> (/home/usul/.nvm/versions/node/v16.14.2/lib/node_modules/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:628:28)
+      at IncomingMessage.emit (node:events:526:35)
+      at endReadableNT (node:internal/streams/readable:1408:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+
+npm manifest: 
+  {
+    "name": "playground",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "next lint"
+    },
+    "dependencies": {
+      "react": "^18",
+      "react-dom": "^18",
+      "next": "14.0.4",
+      "leonardo-ai-gallery": "^0.1.0"
+    },
+    "devDependencies": {
+      "typescript": "^5",
+      "@types/node": "^20",
+      "@types/react": "^18",
+      "@types/react-dom": "^18",
+      "autoprefixer": "^10.0.1",
+      "postcss": "^8",
+      "tailwindcss": "^3.3.0",
+      "eslint": "^8",
+      "eslint-config-next": "14.0.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
