@@ -2,3 +2,5 @@
 node_modules/
 
 playground/.next/
+
+packages/leonardo-ai-gallery/dist/

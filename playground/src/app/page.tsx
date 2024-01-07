@@ -1,6 +1,5 @@
 'use client'
-import { VariantCard } from '@/components/variant-card';
-import Image from 'next/image';
+import { VariantCard } from 'leonardo-ai-gallery';
 
 export default function Home() {
   return <VariantCard />;

@@ -17,7 +17,7 @@
 - `tests`: Unit tests using Jest.
 - `docs`: Project documentation.
 
-## Commands and Rules
+## Short Commands
 - /dnl: Archive and download the project.
 - /upl: Upload a zip file to update or initialize the project.
 - /lst: Show available commands and rules.
@@ -27,8 +27,7 @@
 - /filename: Show the content of a specific file.
 
 ## Continuation Prompt for ChatGPT
-- Continue with API integration and component development.
-- Regularly update the chatbot.md with project progress and any new instructions.
+Follow roadmap.md file for the upcoming tasks and the current state of development
 
 ## User Guide
 - Start by uploading the project zip file.
