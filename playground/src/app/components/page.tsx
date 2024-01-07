@@ -1,7 +1,10 @@
 'use client';
 import React from 'react';
 import { VariantCard } from 'leonardo-ai-gallery';
-import { GenerationCard } from '../../components/generation';
+import {
+  GenerationCard,
+  GenerationCardDefaultProps,
+} from '../../components/generation';
 
 export default function Home() {
   return (
@@ -10,7 +13,10 @@ export default function Home() {
         <VariantCard />
       </div>
       <div>
-        <GenerationCard />
+        <GenerationCard
+          {...GenerationCardDefaultProps}
+          onRegenerate={console.log}
+        />
       </div>
     </main>
   );
