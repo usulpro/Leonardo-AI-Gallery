@@ -5,7 +5,7 @@
     "playground"
   ],
   "scripts": {
-    "dev": "cd playground && yarn dev"
+    "dev": "npm run dev --workspace=playground"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "npm@10.1.0"
 }

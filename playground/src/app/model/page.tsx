@@ -1,4 +1,5 @@
 // File path: playground/pages/model.tsx
+'use client'
 
 import React, { useState } from 'react';
 // Importing the API methods from the src/model directory
