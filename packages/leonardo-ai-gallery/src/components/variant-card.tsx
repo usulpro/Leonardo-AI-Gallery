@@ -109,7 +109,14 @@ const TabButton: React.FC<TabButtonProps> = ({
   );
 };
 
-export function VariantCard() {
+type VariantCardProps = {
+  generated_image_variation_generics: object[];
+  likeCount: number;
+  nsfw: boolean;
+  url: string;
+};
+
+export function VariantCard({ url }: VariantCardProps) {
   const [activeTab, setActiveTab] = React.useState(imageVariations[0].name);
 
   const handleTabActivate = (name: string) => () => {
@@ -142,12 +149,13 @@ export function VariantCard() {
           alt="Smooth Upscaled Image"
           className="w-full"
           height="400"
-          src={imageSrc}
+          src={url}
           style={{
             aspectRatio: '655/400',
             objectFit: 'cover',
           }}
           width="655"
+          loading="lazy"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button className="m-2 bg-white text-black rounded-full p-8">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Generation } from './generation';
 import Header from './header';
 import { useAccount } from './lib/fetching';
 
@@ -8,7 +9,7 @@ type GalleryProps = {
   pages?: number;
 };
 
-const Gallery = ({ token, limit = 8, pages = 3 }: GalleryProps) => {
+export const Gallery = ({ token, limit = 8, pages = 3 }: GalleryProps) => {
   const { generations, isUserLoading, userInfo } = useAccount({
     token,
     limit,
@@ -20,8 +21,11 @@ const Gallery = ({ token, limit = 8, pages = 3 }: GalleryProps) => {
         userIsLoading={isUserLoading}
         userName={userInfo?.user.username}
       />
+      <div>
+        {generations.map((gen) => (
+          <Generation key={gen.id} {...gen} />
+        ))}
+      </div>
     </div>
   );
 };
-
-export default Gallery;

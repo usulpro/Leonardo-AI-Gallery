@@ -9,7 +9,7 @@ import {
 type UseAccountReturnType = {
   isUserLoading: boolean;
   userInfo: UserInfo | null;
-  generations: ImageGeneration[];
+  generations: (ImageGeneration | { id: string; _isSkeleton: boolean })[];
   generationsError: boolean;
 };
 
@@ -63,7 +63,9 @@ export const useAccount = ({
       offset,
       limit,
     })
-      .then(setGenerations)
+      .then((newGens) => {
+        setGenerations([...generations, ...newGens]);
+      })
       .then(() => {
         if (offset > maxOffset) {
           setGenerationsLoading(false);
@@ -78,7 +80,9 @@ export const useAccount = ({
       });
   }, [userInfo?.user?.id, offset]);
 
-  const generationSkeletons = new Array(limit).fill({});
+  const generationSkeletons = new Array(limit)
+    .fill({ _isSkeleton: true })
+    .map((v, ind) => ({ id: `sk${ind}` }));
 
   return {
     isUserLoading: !userInfo && !userError,
