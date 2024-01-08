@@ -8,6 +8,7 @@
     "scripts": {
         "test": "jest",
         "lint": "eslint . --ext .ts,.tsx",
+        "dev": "tsc -w",
         "prepare": "tsc"
     },
     "author": "Oleg Proskuring <oleg@focusreactive.com>",

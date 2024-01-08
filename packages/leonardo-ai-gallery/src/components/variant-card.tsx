@@ -24,7 +24,7 @@ const imageVariations = [
   {
     name: 'smooth',
     title: 'Smooth Upscale',
-    postProcessIcon: () => <span className="text-[2rem]">🍏</span>,
+    postProcessIcon: () => <span className="text-[0.5rem]">🍏</span>,
     isCreated: false,
     renderAction1Status: action1Status,
     context: {
@@ -34,7 +34,7 @@ const imageVariations = [
   {
     name: 'alchemy',
     title: 'Alchemy Upscale',
-    postProcessIcon: () => <span className="text-[2rem]">🍎</span>,
+    postProcessIcon: () => <span className="text-[0.5rem]">🍎</span>,
     isCreated: false,
     renderAction1Status: action1Status,
     context: {
@@ -44,7 +44,7 @@ const imageVariations = [
   {
     name: 'background',
     title: 'Remove Background',
-    postProcessIcon: () => <span className="text-[2rem]">🍌</span>,
+    postProcessIcon: () => <span className="text-[0.5rem]">🍌</span>,
     isCreated: false,
     renderAction1Status: action1Status,
     context: {
@@ -54,7 +54,7 @@ const imageVariations = [
   {
     name: 'refine',
     title: 'Refined',
-    postProcessIcon: () => <span className="text-[2rem]">🌟</span>,
+    postProcessIcon: () => <span className="text-[0.5rem]">🌟</span>,
     isCreated: false,
     renderAction1Status: action1Status,
     context: {
@@ -78,7 +78,7 @@ type TabButtonProps = {
 const TabButton: React.FC<TabButtonProps> = ({
   title,
   isActive,
-  postProcessIcon = () => <span className="text-[2rem]">🍏</span>,
+  postProcessIcon = () => <span className="text-[0.5rem]">🍏</span>,
   isCreated = true,
   renderAction1Status = () => '⬆',
   context = {},
@@ -86,24 +86,24 @@ const TabButton: React.FC<TabButtonProps> = ({
 }) => {
   const bgColor = isActive ? 'bg-gray-700' : 'bg-gray-800';
   const top = isActive ? 'top-[-1px]' : '';
-  const height = isActive ? 'h-[122px]' : 'h-[120px]';
+  const height = isActive ? 'h-[62px]' : 'h-60px]';
   const border = isActive ? `border-l border-r border-b ${tabBorderColor}` : '';
   const isCreatedColor = isCreated ? 'text-white' : 'text-gray-500';
   return (
     <Button
-      className={`${bgColor} ${top} ${height} ${border} p-4 rounded-none rounded-b-lg  relative`}
+      className={`${bgColor} ${top} ${height} ${border} p-1 rounded-none rounded-b-lg  relative`}
       variant="ghost"
       onClick={onActivate}
     >
       <div className="text-white font-bold text-xl text-center flex flex-col items-center">
-        <div className="w-full h-3 flex justify-center">
+        <div className="w-full h-1 flex justify-center">
           {postProcessIcon(context)}
         </div>
-        <div className="flex space-x-1 mt-2 justify-between w-full mb-2">
+        <div className="flex space-x-1 mt-1 justify-between w-full mb-1">
           <div className={isCreatedColor}>✔</div>
           <div>{renderAction1Status(context)}</div>
         </div>
-        <p className="text-sm">{title || 'unknown style'}</p>
+        {/* <p className="text-sm">{title || 'unknown style'}</p> */}
       </div>
     </Button>
   );
@@ -119,7 +119,7 @@ export function VariantCard() {
   return (
     <Card
       key="1"
-      className="w-[655px] bg-gray-800 text-white"
+      className=" bg-gray-800 text-white min-w-[320px]"
       style={{
         borderWidth: '4px',
         borderStyle: 'solid',
