@@ -32,18 +32,20 @@ export function Generation(props: ImageGeneration) {
       : promptStart;
   const handleRegenerate = () => null;
   return (
-    <section className="dark w-full bg-gradient-to-r from-gray-900 to-blue-900 text-white py-12 px-8">
+    <section
+      className="dark w-full text-white py-12 px-8"
+      style={{
+        backgroundImage: 'linear-gradient(45deg, #1f1f25, #2d2d2d)',
+      }}
+    >
       <div className="mx-auto flex flex-row justify-start items-start gap-10">
         <div className="md:col-span-1 min-w-[400px]">
           <GenerationCard
+            {...props}
             key={props.id}
             promptTitle={promptTitle}
-            createdAt={props.createdAt}
-            initStrength={props.initStrength}
             inputResolution={`${props.imageWidth} x ${props.imageHeight}`}
-            prompt={props.prompt}
-            negativePrompt={props.negativePrompt}
-            seed={props.seed}
+            publicImage={props.public}
             onRegenerate={handleRegenerate}
           />
         </div>

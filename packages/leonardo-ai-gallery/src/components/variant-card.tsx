@@ -128,10 +128,10 @@ export function VariantCard({ url }: VariantCardProps) {
       key="1"
       className=" bg-gray-800 text-white min-w-[320px]"
       style={{
-        borderWidth: '4px',
+        borderWidth: '3px',
         borderStyle: 'solid',
         borderImage:
-          'linear-gradient(216deg, #a6004b, #df03ff, #0041c3) 1 / 1 / 0 stretch',
+          'linear-gradient(216deg, rgb(121 29 118), rgb(0, 65, 195)) 1 / 1 / 0 stretch',
       }}
     >
       <CardHeader className="flex justify-between flex-row align-baseline p-4 border-b border-gray-700">

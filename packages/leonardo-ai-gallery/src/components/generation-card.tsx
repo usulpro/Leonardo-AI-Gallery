@@ -27,7 +27,9 @@ export const GenerationCardDefaultProps = {
 
 type GenerationCardProps = ImageGeneration & {
   promptTitle: string;
+  modelName: string;
   inputResolution: string;
+  publicImage: boolean;
   onRegenerate: ({
     prompt,
     negativePrompt,
@@ -42,17 +44,17 @@ type GenerationCardProps = ImageGeneration & {
 export function GenerationCard({
   promptTitle,
   modelName,
+  modelId,
   inputResolution,
   createdAt,
   presetStyle,
-  pipeline,
-  seed,
-  preset,
   promptMagic,
-  initStrength,
-  highContrast,
+  photoReal,
+  seed,
   prompt,
   negativePrompt,
+  publicImage,
+  scheduler,
   onRegenerate,
 }: GenerationCardProps) {
   const [currentPrompt, setPrompt] = useState(prompt);
@@ -74,7 +76,7 @@ export function GenerationCard({
       <h2 className="text-xl font-bold mb-4">{promptTitle}</h2>
       <div className="flex items-center mb-4">
         <PencilIcon className="text-blue-500 mr-2" />
-        <h3 className="text-lg font-semibold">{modelName}</h3>
+        <h3 className="text-lg font-semibold">{modelId}</h3>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
@@ -89,7 +91,7 @@ export function GenerationCard({
           <p className="text-sm font-medium text-gray-400">Pipeline</p>
           <div className="flex items-center">
             <CheckCircleIcon className="text-green-500 mr-1" />
-            <p className="text-sm">{pipeline}</p>
+            {/* <p className="text-sm">{pipeline}</p> */}
           </div>
         </div>
         <div>
@@ -108,16 +110,20 @@ export function GenerationCard({
           <p className="text-sm">{presetStyle}</p>
         </div>
         <div>
+          <p className="text-sm font-medium text-gray-400">Scheduler</p>
+          <p className="text-sm">{scheduler}</p>
+        </div>
+        <div>
           <p className="text-sm font-medium text-gray-400">Prompt Magic</p>
-          <p className="text-sm">{promptMagic}</p>
+          <p className="text-sm">{promptMagic ? 'yes' : '-'}</p>
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-400">Init Strength</p>
-          <p className="text-sm">{initStrength}</p>
+          <p className="text-sm font-medium text-gray-400">Photo Real</p>
+          <p className="text-sm">{photoReal ? 'yes' : '-'}</p>
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-400">High Contrast</p>
-          <p className="text-sm">{highContrast}</p>
+          <p className="text-sm font-medium text-gray-400">Public</p>
+          <p className="text-sm">{publicImage ? 'yes' : '-'}</p>
         </div>
       </div>
       <Textarea
