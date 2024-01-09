@@ -42,3 +42,20 @@ Contributions are welcome! For major changes, please open an issue first to disc
 
 ## Credentials
 
+The project is developed with AI assistance from [TS-GPT-Engineer](https://github.com/usulpro/TS-GPT-Engineer).
+
+**Created by Oleg Proskurin**
+
+Driven by a fascination with AI and its potential in everyday life, I spearheaded the Leonardo AI Gallery project. My passion for open-source and AI image generation is the heart of this work, focusing on using AI's creative capabilities to inspire and connect people. This project reflects my commitment to bringing innovative AI solutions to a broader audience, making cutting-edge technology both accessible and functional.
+
+Connect with Me:
+
+GitHub: github.com/usulpro
+Twitter: @usulpro
+LinkedIn: linkedin.com/in/olegproskurin
+Blogs: focusreactive.com/blog/author/usulpro | dev.to/usulpro
+
+_Crafted with ❤ for merging art and technology. 2024_
+
+
+
