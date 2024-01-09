@@ -51,8 +51,11 @@ Driven by a fascination with AI and its potential in everyday life, I spearheade
 Connect with Me:
 
 GitHub: github.com/usulpro
+
 Twitter: @usulpro
+
 LinkedIn: linkedin.com/in/olegproskurin
+
 Blogs: focusreactive.com/blog/author/usulpro | dev.to/usulpro
 
 _Crafted with ❤ for merging art and technology. 2024_
