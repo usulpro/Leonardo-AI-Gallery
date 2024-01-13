@@ -7,7 +7,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { CheckCircleIcon, PencilIcon } from './icons/v0';
-import { ImageGeneration } from '../model';
+import { ImageGeneration, ProcessedGeneration } from '../model';
 
 export const GenerationCardDefaultProps = {
   promptTitle: 'Create a round thumbnail...',
@@ -25,9 +25,8 @@ export const GenerationCardDefaultProps = {
   negativePrompt: 'nsfw, nude, nudity, text',
 };
 
-type GenerationCardProps = ImageGeneration & {
+type GenerationCardProps = ProcessedGeneration & {
   promptTitle: string;
-  modelName: string;
   inputResolution: string;
   publicImage: boolean;
   onRegenerate: ({
@@ -37,13 +36,13 @@ type GenerationCardProps = ImageGeneration & {
   }: {
     prompt: string;
     negativePrompt: string;
-    seed: number;
+    seed?: number;
   }) => void;
 };
 
 export function GenerationCard({
   promptTitle,
-  modelName,
+  model,
   modelId,
   inputResolution,
   createdAt,
@@ -62,21 +61,34 @@ export function GenerationCard({
   const [currentSeed, setSeed] = useState(seed);
 
   const handleRegenerate = () => {
+    if (!currentPrompt) {
+      return;
+    }
     onRegenerate({
       prompt: currentPrompt,
-      negativePrompt: currentNegativePrompt,
+      negativePrompt: currentNegativePrompt || '',
       seed: currentSeed,
     });
   };
 
-  const date = new Date(createdAt).toLocaleString();
+  const date = new Date(createdAt || '').toLocaleString();
 
   return (
     <div key="1" className="bg-[#1a1a1a] text-white p-4 rounded-lg max-w-md">
-      <h2 className="text-xl font-bold mb-4">{promptTitle}</h2>
-      <div className="flex items-center mb-4">
-        <PencilIcon className="text-blue-500 mr-2" />
-        <h3 className="text-lg font-semibold">{modelId}</h3>
+      <h2
+        style={{ textTransform: 'capitalize' }}
+        className="text-xl capitalize font-bold mb-4"
+      >
+        {promptTitle}
+      </h2>
+      <div
+        className="flex items-center mb-4 text-blue-500 gap-[16px]"
+        style={{ gap: 16 }}
+      >
+        <PencilIcon />
+        <h3 className="text-lg font-semibold" title={model?.description}>
+          {model?.name || modelId}
+        </h3>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>

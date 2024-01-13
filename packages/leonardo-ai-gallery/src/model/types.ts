@@ -1,5 +1,9 @@
 // Path: src/model/types.ts
 
+type Optional<T> = {
+  [P in keyof T]?: T[P];
+};
+
 export enum GenerationStatus {
   Complete = 'COMPLETE',
   Pending = 'PENDING',
@@ -18,6 +22,9 @@ export enum PresetStyle {
   GENERAL = 'GENERAL',
   ENVIRONMENT = 'ENVIRONMENT',
   DYNAMIC = 'DYNAMIC',
+  CINEMATIC = 'CINEMATIC',
+  VIBRANT = 'VIBRANT',
+  LEONARDO = 'LEONARDO',
   NONE = 'NONE',
 }
 
@@ -58,6 +65,11 @@ export type ImageGeneration = {
   generation_elements: any[]; // Update as per the actual structure
 };
 
+export type ProcessedGeneration = Optional<ImageGeneration> & {
+  model?: CustomModel;
+  _isSkeleton: boolean;
+};
+
 export type UserInfo = {
   user: {
     id: string;
@@ -68,4 +80,19 @@ export type UserInfo = {
   subscriptionGptTokens: number;
   subscriptionModelTokens: number;
   apiConcurrencySlots: number;
+};
+
+// Types for Platform Models response
+export type PlatformImage = {
+  id: string;
+  url: string;
+};
+
+export type CustomModel = {
+  id: string;
+  name: string;
+  description: string;
+  nsfw: boolean;
+  featured: boolean;
+  generated_image?: PlatformImage;
 };

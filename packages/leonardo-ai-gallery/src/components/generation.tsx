@@ -6,7 +6,7 @@ import React from 'react';
 import { CardTitle, CardHeader, CardContent, Card } from './ui/card';
 import { GenerationCard } from './generation-card';
 import { VariantCard } from './variant-card';
-import { ImageGeneration } from '../model';
+import { ImageGeneration, ProcessedGeneration } from '../model';
 
 // type GenerationProps = {
 //   promptTitle: string;
@@ -23,7 +23,7 @@ import { ImageGeneration } from '../model';
 //   negativePrompt: string;
 // };
 
-export function Generation(props: ImageGeneration) {
+export function Generation(props: ProcessedGeneration) {
   const { generated_images, ...restProps } = props;
   const promptStart = (props?.prompt || '').slice(0, 26);
   const promptTitle =
@@ -45,7 +45,7 @@ export function Generation(props: ImageGeneration) {
             key={props.id}
             promptTitle={promptTitle}
             inputResolution={`${props.imageWidth} x ${props.imageHeight}`}
-            publicImage={props.public}
+            publicImage={props.public || false}
             onRegenerate={handleRegenerate}
           />
         </div>
