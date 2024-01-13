@@ -11,7 +11,7 @@
         "dev": "tsc -w",
         "prepare": "tsc"
     },
-    "author": "Oleg Proskuring <oleg@focusreactive.com>",
+    "author": "Oleg Proskurin <regx@usul.su>",
     "license": "MIT",
     "dependencies": {
         "react": "^18.2.0",

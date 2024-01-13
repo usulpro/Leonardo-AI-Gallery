@@ -5,7 +5,7 @@
     "playground"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=playground"
+    "dev": "npm run dev"
   },
   "packageManager": "npm@10.1.0"
 }
