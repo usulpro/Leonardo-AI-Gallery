@@ -1,16 +1,20 @@
 import React from 'react';
 import {
   ImageGeneration,
+  ProcessedGeneration,
   UserInfo,
   fetchGenerationsByUserId,
   fetchUserInfo,
 } from '../../model';
 
+import { GetModelByIdFunction, usePlatformModels } from './fetchPlatformModels';
+
 type UseAccountReturnType = {
   isUserLoading: boolean;
   userInfo: UserInfo | null;
-  generations: (ImageGeneration | { id: string; _isSkeleton: boolean })[];
+  generations: ProcessedGeneration[];
   generationsError: boolean;
+  getModelById: GetModelByIdFunction;
 };
 
 type UseAccountProps = {
@@ -33,6 +37,8 @@ export const useAccount = ({
     React.useState<boolean>(false);
   const [offset, setOffset] = React.useState<number>(0);
   const maxOffset: number = (pages - 1) * limit + 1;
+
+  const { getModelById } = usePlatformModels(token);
 
   React.useDebugValue({
     userInfo,
@@ -82,15 +88,22 @@ export const useAccount = ({
 
   const generationSkeletons = new Array(limit)
     .fill({ _isSkeleton: true })
-    .map((v, ind) => ({ id: `sk${ind}` }));
+    .map((v, ind) => ({ id: `sk${ind}`, ...v }));
+
+  const processedGenerations: ProcessedGeneration[] = [
+    ...generations.map((g) => ({
+      ...g,
+      model: getModelById(g.modelId, g.photoReal),
+      _isSkeleton: false,
+    })),
+    ...(generationsLoading ? generationSkeletons : []),
+  ];
 
   return {
     isUserLoading: !userInfo && !userError,
     userInfo,
-    generations: [
-      ...generations,
-      ...(generationsLoading ? generationSkeletons : []),
-    ],
+    generations: processedGenerations,
     generationsError,
+    getModelById,
   };
 };
