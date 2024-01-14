@@ -9,6 +9,13 @@ export enum GenerationStatus {
   Pending = 'PENDING',
 }
 
+export enum TransformType {
+  UPSCALE = 'UPSCALE',
+  UNZOOM = 'UNZOOM',
+  NOBG = 'NOBG',
+  ORIGIN = 'ORIGIN',
+}
+
 export enum PresetStyle {
   CREATIVE = 'CREATIVE',
   PORTRAIT = 'PORTRAIT',
@@ -28,16 +35,21 @@ export enum PresetStyle {
   NONE = 'NONE',
 }
 
-// TypeScript type for Generated Image
+export type ImageVariation = {
+  url: string;
+  id: string;
+  status: GenerationStatus;
+  transformType: TransformType;
+};
+
 export type GeneratedImage = {
   url: string;
   nsfw: boolean;
   id: string;
   likeCount: number;
-  generated_image_variation_generics: any[]; // Update as per the actual structure
+  generated_image_variation_generics: ImageVariation[];
 };
 
-// TypeScript type for Image Generation
 export type ImageGeneration = {
   generated_images: GeneratedImage[];
   modelId: string;
@@ -95,4 +107,20 @@ export type CustomModel = {
   nsfw: boolean;
   featured: boolean;
   generated_image?: PlatformImage;
+};
+
+export type SortedVariations = {
+  plain: ImageVariation[];
+  sorted: {
+    original: ImageVariation;
+    upscales: ImageVariation[];
+    unzooms: ImageVariation[];
+    nobgs: ImageVariation[];
+    unknowns: ImageVariation[];
+  };
+};
+
+export type TransformProps = {
+  title: string;
+
 };

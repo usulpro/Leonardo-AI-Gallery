@@ -4,4 +4,5 @@
 export * from './userInfo';
 export * from './generations';
 export * from './platformModels';
+export * from './variations';
 export * from './types';

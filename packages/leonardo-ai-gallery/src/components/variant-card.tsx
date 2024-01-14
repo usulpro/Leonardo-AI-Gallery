@@ -7,105 +7,140 @@ import { CardHeader, CardContent, CardFooter, Card } from './ui/card';
 import { Button } from './ui/button';
 import { Tabs } from './ui/tabs';
 import { ExpandIcon, SmileIcon, UploadIcon } from './icons/v0';
+import {
+  ImageVariation,
+  SortedVariations,
+  TransformType,
+  transformsMap,
+} from '../model';
 
-const imageSrc =
-  'https://cdn.leonardo.ai/users/eaedaca1-ddc9-4ba8-8e04-54f5efbd2cc3/generations/c078f064-0fd2-468f-84f1-06dada47f0fa/Leonardo_Diffusion_XL_ski_boots_elegant_white_blue_and_orange_0.jpg';
-
-interface Context {
-  isUploaded: boolean;
-}
-
-const action1Status = (context: Context = { isUploaded: false }) => {
-  const color = context.isUploaded ? 'text-gray-400' : 'text-gray-600';
-  return <span className={color}>⬆</span>;
-};
-
-const imageVariations = [
-  {
-    name: 'smooth',
-    title: 'Smooth Upscale',
-    postProcessIcon: () => <span className="text-[0.5rem]">🍏</span>,
-    isCreated: false,
-    renderAction1Status: action1Status,
-    context: {
-      isUploaded: false,
-    },
-  },
-  {
-    name: 'alchemy',
-    title: 'Alchemy Upscale',
-    postProcessIcon: () => <span className="text-[0.5rem]">🍎</span>,
-    isCreated: false,
-    renderAction1Status: action1Status,
-    context: {
-      isUploaded: false,
-    },
-  },
-  {
-    name: 'background',
-    title: 'Remove Background',
-    postProcessIcon: () => <span className="text-[0.5rem]">🍌</span>,
-    isCreated: false,
-    renderAction1Status: action1Status,
-    context: {
-      isUploaded: false,
-    },
-  },
-  {
-    name: 'refine',
-    title: 'Refined',
-    postProcessIcon: () => <span className="text-[0.5rem]">🌟</span>,
-    isCreated: false,
-    renderAction1Status: action1Status,
-    context: {
-      isUploaded: false,
-    },
-  },
-];
-
-const tabBorderColor = 'border-gray-400';
-
-type TabButtonProps = {
-  title: string;
-  isActive: boolean;
-  postProcessIcon?: (context: any) => JSX.Element;
-  isCreated?: boolean;
-  renderAction1Status?: (context: any) => JSX.Element;
-  context?: object;
-  onActivate: () => void;
-};
-
-const TabButton: React.FC<TabButtonProps> = ({
-  title,
+const OriginButton = ({
+  status1,
+  status2,
   isActive,
-  postProcessIcon = () => <span className="text-[0.5rem]">🍏</span>,
-  isCreated = true,
-  renderAction1Status = () => '⬆',
-  context = {},
   onActivate,
-}) => {
-  const bgColor = isActive ? 'bg-gray-700' : 'bg-gray-800';
-  const top = isActive ? 'top-[-1px]' : '';
-  const height = isActive ? 'h-[62px]' : 'h-60px]';
-  const border = isActive ? `border-l border-r border-b ${tabBorderColor}` : '';
-  const isCreatedColor = isCreated ? 'text-white' : 'text-gray-500';
+}: VarianButtonProps) => {
   return (
-    <Button
-      className={`${bgColor} ${top} ${height} ${border} p-1 rounded-none rounded-b-lg  relative`}
-      variant="ghost"
+    <div
+      className="w-24 h-24 flex-none flex justify-center items-center p-2 self-center"
+      style={{
+        flex: 'none',
+        width: 60,
+        height: 60,
+        padding: 8,
+        alignSelf: 'center',
+      }}
+    >
+      <button
+        className={`relative w-full h-full border border-gray-800 ${
+          isActive ? 'bg-gray-700' : 'bg-gray-800'
+        } rounded-md text-lg hover:bg-gray-700`}
+        style={{ height: '100%' }}
+        title={transformsMap[TransformType.ORIGIN].title}
+        onClick={onActivate}
+      >
+        {transformsMap[TransformType.ORIGIN].prefix}
+        {status1 ? (
+          <div className="absolute bottom-0 left-0 rounded-full bg-violet-500 w-2 h-2" />
+        ) : null}
+        {status2 ? (
+          <div className="absolute bottom-0 right-0 rounded-full bg-red-700 w-2 h-2" />
+        ) : null}
+      </button>
+    </div>
+  );
+};
+
+type VarianButtonProps = {
+  title?: string;
+  type: TransformType | null;
+  isActive: boolean;
+  onActivate: () => void;
+  status1?: boolean;
+  status2?: boolean;
+};
+
+const VarianButton = ({
+  title,
+  type,
+  status1,
+  status2,
+  isActive,
+  onActivate,
+}: VarianButtonProps) => {
+  if (type === TransformType.ORIGIN) {
+    return (
+      <OriginButton
+        title={title}
+        type={type}
+        isActive={isActive}
+        onActivate={onActivate}
+        status1={status1}
+        status2={status2}
+      />
+    );
+  }
+  return (
+    <button
+      className={`relative rounded-sm px-4 py-1 w-full h-full hover:bg-gray-600 ${
+        isActive ? 'bg-gray-700' : 'bg-gray-800'
+      } text-sm`}
       onClick={onActivate}
     >
-      <div className="text-white font-bold text-xl text-center flex flex-col items-center">
-        <div className="w-full h-1 flex justify-center">
-          {postProcessIcon(context)}
-        </div>
-        <div className="flex space-x-1 mt-1 justify-between w-full mb-1">
-          <div className={isCreatedColor}>✔</div>
-          <div>{renderAction1Status(context)}</div>
-        </div>
-        {/* <p className="text-sm">{title || 'unknown style'}</p> */}
+      <span
+        className="opacity-90"
+        style={{ color: transformsMap[type || 'unknown'].color }}
+      >
+        {title}
+      </span>
+      {status1 ? (
+        <div className="absolute bottom-1 left-2 rounded-full bg-violet-500 w-1 h-1" />
+      ) : null}
+      {status2 ? (
+        <div className="absolute bottom-1 right-2 rounded-full bg-red-700 w-1 h-1" />
+      ) : null}
+    </button>
+  );
+};
+
+const VariationsRow = ({
+  variations,
+  type,
+  activeVariation,
+  onActive,
+}: {
+  variations: ImageVariation[];
+  type: TransformType | null;
+  activeVariation: ImageVariation;
+  onActive: (v: ImageVariation) => void;
+}) => {
+  if (!type) {
+    return null;
+  }
+
+  const handleActivate = (v: ImageVariation) => () => onActive(v);
+
+  return (
+    <div
+      className="flex flex-row justify-start items-center gap-2 h-5"
+      style={{ gap: 2, height: 28 }}
+    >
+      <div
+        className="text-[12px] text-gray-300 mr-2 w-10 text-nowrap"
+        style={{ fontSize: 12, width: 34, flex: 'none' }}
+      >
+        {transformsMap[type].title}:
       </div>
-    </Button>
+      {variations.map((v, ind) => (
+        <VarianButton
+          key={v.id}
+          title={`${transformsMap[type].prefix}${ind + 1}`}
+          type={type}
+          isActive={activeVariation.id === v.id}
+          onActivate={handleActivate(v)}
+        />
+      ))}
+    </div>
   );
 };
 
@@ -114,18 +149,20 @@ type VariantCardProps = {
   likeCount: number;
   nsfw: boolean;
   url: string;
+  variations: SortedVariations;
 };
 
-export function VariantCard({ url }: VariantCardProps) {
-  const [activeTab, setActiveTab] = React.useState(imageVariations[0].name);
+export function VariantCard({ url, variations }: VariantCardProps) {
+  const [variation, setVariation] = React.useState<ImageVariation>(
+    variations.plain[0],
+  );
 
-  const handleTabActivate = (name: string) => () => {
-    setActiveTab(name);
+  const handleSetActive = (v: ImageVariation) => {
+    setVariation(v);
   };
 
   return (
     <Card
-      key="1"
       className=" bg-gray-800 text-white"
       style={{
         width: 320,
@@ -137,8 +174,10 @@ export function VariantCard({ url }: VariantCardProps) {
     >
       <CardHeader className="flex justify-between flex-row align-baseline p-4 border-b border-gray-700">
         <div className="flex items-center space-x-2">
-          <SmileIcon className="text-blue-500" />
-          <span>Smooth Upscaled Image</span>
+          <span className="text-lg">
+            {transformsMap[variation.transformType].icon}
+          </span>
+          <span>{transformsMap[variation.transformType].header}</span>
         </div>
         <div className="flex items-center space-x-2 ml-auto">
           <UploadIcon className="text-blue-500" />
@@ -147,10 +186,10 @@ export function VariantCard({ url }: VariantCardProps) {
       </CardHeader>
       <CardContent className="relative group p-0">
         <img
-          alt="Smooth Upscaled Image"
+          alt={transformsMap[variation.transformType].header}
           className="w-full"
           height="400"
-          src={url}
+          src={variation.url}
           style={{
             aspectRatio: '655/400',
             objectFit: 'cover',
@@ -170,24 +209,47 @@ export function VariantCard({ url }: VariantCardProps) {
           </Button>
         </div>
       </CardContent>
-      <div className={`bg-gray-700 h-3 w-full border-b-2 ${tabBorderColor}`} />
-      <CardFooter className="flex flex-col justify-between pt-0 bg-gray-900">
-        <Tabs>
-          <div className="flex gap-3 justify-start relative">
-            {imageVariations.map((variant) => (
-              <TabButton
-                isActive={activeTab === variant.name}
-                onActivate={handleTabActivate(variant.name)}
-                title={variant.title}
-                context={variant.context}
-                isCreated={variant.isCreated}
-                key={variant.name}
-                postProcessIcon={variant.postProcessIcon}
-                renderAction1Status={variant.renderAction1Status}
-              />
-            ))}
-          </div>
-        </Tabs>
+      {/* <div className={`bg-gray-700 h-3 w-full border-b-2 ${tabBorderColor}`} /> */}
+      <CardFooter
+        className="flex flex-row justify-start items-start px-0 py-2 bg-gray-900 min-h-24 gap-2"
+        // style={{ minHeight: 100 }}
+      >
+        <VarianButton
+          type={TransformType.ORIGIN}
+          isActive={variation.id === variations.sorted.original.id}
+          onActivate={() => setVariation(variations.sorted.original)}
+          status1
+          status2
+        />
+        <div
+          className="flex flex-col justify-start items-start gap-2"
+          style={{ gap: 4 }}
+        >
+          <VariationsRow
+            variations={variations.sorted.upscales}
+            type={TransformType.UPSCALE}
+            activeVariation={variation}
+            onActive={handleSetActive}
+          />
+          <VariationsRow
+            variations={variations.sorted.unzooms}
+            type={TransformType.UNZOOM}
+            activeVariation={variation}
+            onActive={handleSetActive}
+          />
+          <VariationsRow
+            variations={variations.sorted.nobgs}
+            type={TransformType.NOBG}
+            activeVariation={variation}
+            onActive={handleSetActive}
+          />
+          <VariationsRow
+            variations={variations.sorted.unknowns}
+            activeVariation={variation}
+            onActive={handleSetActive}
+            type={null}
+          />
+        </div>
       </CardFooter>
     </Card>
   );

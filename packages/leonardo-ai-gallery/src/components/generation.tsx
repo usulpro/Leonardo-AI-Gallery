@@ -6,7 +6,7 @@ import React from 'react';
 import { CardTitle, CardHeader, CardContent, Card } from './ui/card';
 import { GenerationCard } from './generation-card';
 import { VariantCard } from './variant-card';
-import { ImageGeneration, ProcessedGeneration } from '../model';
+import { ImageGeneration, ProcessedGeneration, sortVariations } from '../model';
 
 // type GenerationProps = {
 //   promptTitle: string;
@@ -49,18 +49,15 @@ export function Generation(props: ProcessedGeneration) {
         />
         <div
           className="flex flex-row flex-wrap gap-4"
-          style={{ flexWrap: 'wrap' }}
+          // style={{ flexWrap: 'wrap' }}
         >
           {(generated_images || []).map((image) => (
-            <VariantCard key={image.id} {...image} />
+            <VariantCard
+              key={image.id}
+              {...image}
+              variations={sortVariations(image)}
+            />
           ))}
-          {/* <VariantCard />
-          <VariantCard />
-          <VariantCard />
-          <VariantCard />
-          <VariantCard />
-          <VariantCard />
-          <VariantCard /> */}
         </div>
       </div>
     </section>
