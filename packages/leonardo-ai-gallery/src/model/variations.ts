@@ -1,3 +1,4 @@
+import { API_BASE_URL } from './config';
 import {
   GeneratedImage,
   GenerationStatus,
@@ -44,12 +45,137 @@ export const sortVariations = (image: GeneratedImage): SortedVariations => {
   };
 };
 
+type VariationJob = {
+  id: string;
+  apiCreditCost?: null;
+};
+
+type createUnzoomJobProps = {
+  token: string;
+  id: string;
+  isVariation: boolean;
+};
+
+const createUnzoomJob = async ({
+  token,
+  id,
+  isVariation,
+}: createUnzoomJobProps): Promise<VariationJob> => {
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id, isVariation }),
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/variations/unzoom`, options);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data?.sdUnzoomJob?.id) {
+      throw new Error(
+        `Error: no sdUnzoomJob in response - ${response.statusText}`,
+      );
+    }
+    return data;
+  } catch (error) {
+    console.error('Error creating unzoom job:', error);
+    throw error;
+  }
+};
+
+type createUpscaleJobProps = {
+  token: string;
+  id: string;
+};
+
+const createUpscaleJob = async ({
+  token,
+  id,
+}: createUpscaleJobProps): Promise<VariationJob> => {
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id }),
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/variations/upscale`, options);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data?.sdUpscaleJob?.id) {
+      throw new Error(
+        `Error: no sdUpscaleJob in response - ${response.statusText}`,
+      );
+    }
+    return data.sdUpscaleJob;
+  } catch (error) {
+    console.error('Error creating upscale job:', error);
+    throw error;
+  }
+};
+
+type createNobgJobProps = {
+  token: string;
+  id: string;
+  isVariation: boolean;
+};
+
+const createNobgJob = async ({
+  token,
+  id,
+  isVariation,
+}: createNobgJobProps): Promise<VariationJob> => {
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id, isVariation }),
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/variations/nobg`, options);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data?.sdNobgJob?.id) {
+      throw new Error(
+        `Error: no sdNobgJob in response - ${response.statusText}`,
+      );
+    }
+    return data.sdNobgJob;
+  } catch (error) {
+    console.error('Error creating no background job:', error);
+    throw error;
+  }
+};
+
 export const transformsMap = {
   [TransformType.ORIGIN]: {
     header: 'Original',
     title: 'Original',
     prefix: '/0️/',
     icon: '🦋',
+    color: 'white',
+    startJob: ({ id }: { id: string }) => {
+      console.warn(`Can't start a job for Original type`);
+      return { id };
+    },
   },
   [TransformType.UPSCALE]: {
     header: 'Upscaled',
@@ -57,6 +183,7 @@ export const transformsMap = {
     prefix: 's',
     icon: '💚',
     color: '#00d300',
+    startJob: createUpscaleJob,
   },
   [TransformType.UNZOOM]: {
     header: 'Unzoomed',
@@ -64,6 +191,7 @@ export const transformsMap = {
     prefix: 'z',
     icon: '🧡',
     color: '#d38d00',
+    startJob: createUnzoomJob,
   },
   [TransformType.NOBG]: {
     header: 'No background',
@@ -71,6 +199,7 @@ export const transformsMap = {
     prefix: 'b',
     icon: '💙',
     color: '#1185ff',
+    startJob: createNobgJob,
   },
   unknown: {
     header: 'Unknown',
@@ -78,5 +207,29 @@ export const transformsMap = {
     prefix: '?',
     icon: '🖤',
     color: '#7d7d7d',
+    startJob: () => {
+      throw new Error(`Can't start a job for unknown type`);
+    },
   },
 };
+
+type createVariationJobProps = {
+  token: string;
+  id: string;
+  isVariation: boolean;
+  type: TransformType;
+};
+
+export const createVariationJob = async ({
+  token,
+  type,
+  id,
+  isVariation,
+}: createVariationJobProps): Promise<VariationJob> => {
+  const startJob = transformsMap[type].startJob;
+  const result = await startJob({ token, id, isVariation });
+
+  return result!;
+};
+
+// 1a708ce2-1ad9-4695-a3a2-ca3d1900b3e7

@@ -80,6 +80,7 @@ export type ImageGeneration = {
 export type ProcessedGeneration = Optional<ImageGeneration> & {
   model?: CustomModel;
   _isSkeleton: boolean;
+  token: string;
 };
 
 export type UserInfo = {
@@ -122,5 +123,4 @@ export type SortedVariations = {
 
 export type TransformProps = {
   title: string;
-
 };

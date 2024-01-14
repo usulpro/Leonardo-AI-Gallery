@@ -23,7 +23,7 @@ export const Gallery = ({ token, limit = 8, pages = 3 }: GalleryProps) => {
       />
       <div>
         {generations.map((gen) => (
-          <Generation key={gen.id} {...gen} />
+          <Generation key={gen.id} {...gen} token={token} />
         ))}
       </div>
     </div>

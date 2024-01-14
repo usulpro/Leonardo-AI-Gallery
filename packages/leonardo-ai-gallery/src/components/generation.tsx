@@ -56,6 +56,7 @@ export function Generation(props: ProcessedGeneration) {
               key={image.id}
               {...image}
               variations={sortVariations(image)}
+              token={props.token}
             />
           ))}
         </div>
