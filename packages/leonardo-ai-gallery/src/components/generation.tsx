@@ -39,21 +39,17 @@ export function Generation(props: ProcessedGeneration) {
       }}
     >
       <div className="mx-auto flex flex-row justify-start items-start gap-10">
-        <div className="md:col-span-1 min-w-[400px]">
-          <GenerationCard
-            {...props}
-            key={props.id}
-            promptTitle={promptTitle}
-            inputResolution={`${props.imageWidth} x ${props.imageHeight}`}
-            publicImage={props.public || false}
-            onRegenerate={handleRegenerate}
-          />
-        </div>
+        <GenerationCard
+          {...props}
+          key={props.id}
+          promptTitle={promptTitle}
+          inputResolution={`${props.imageWidth} x ${props.imageHeight}`}
+          publicImage={props.public || false}
+          onRegenerate={handleRegenerate}
+        />
         <div
-          className="md:col-span-2 grid md:grid-cols-4 gap-4"
-          style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          }}
+          className="flex flex-row flex-wrap gap-4"
+          style={{ flexWrap: 'wrap' }}
         >
           {(generated_images || []).map((image) => (
             <VariantCard key={image.id} {...image} />

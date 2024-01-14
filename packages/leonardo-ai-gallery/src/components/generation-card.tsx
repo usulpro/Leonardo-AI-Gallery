@@ -74,7 +74,11 @@ export function GenerationCard({
   const date = new Date(createdAt || '').toLocaleString();
 
   return (
-    <div key="1" className="bg-[#1a1a1a] text-white p-4 rounded-lg max-w-md">
+    <div
+      key="1"
+      className="bg-[#1a1a1a] text-white p-4 rounded-lg w-md flex-none"
+      style={{ flex: 'none', width: 420 }}
+    >
       <h2
         style={{ textTransform: 'capitalize' }}
         className="text-xl capitalize font-bold mb-4"

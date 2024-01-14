@@ -126,8 +126,9 @@ export function VariantCard({ url }: VariantCardProps) {
   return (
     <Card
       key="1"
-      className=" bg-gray-800 text-white min-w-[320px]"
+      className=" bg-gray-800 text-white"
       style={{
+        width: 320,
         borderWidth: '3px',
         borderStyle: 'solid',
         borderImage:
