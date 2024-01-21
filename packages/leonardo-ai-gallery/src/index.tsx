@@ -7,10 +7,11 @@ import config from './twind.config';
 import { Gallery } from './components';
 
 // activate twind
-const tw = install(config);
+// const tw = install(config);
+window.tw = () => install(config);
 
-const html = inline(renderToString(<Gallery token='123'/>), tw);
-console.log("🚀 ~ html:", html)
+// const html = inline(renderToString(<Gallery token='123'/>), tw);
+// console.log("🚀 ~ html:", html)
 
 export * from './model';
 export * from './components';
