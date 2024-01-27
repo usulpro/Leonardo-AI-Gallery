@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ImageSkeleton = () => {
+export const ImageSkeleton = ({ color }: { color?: string }) => {
   return (
     <div
       role="status"
@@ -30,7 +30,7 @@ export const ImageSkeleton = () => {
   );
 };
 
-export const SmallSpinner = () => {
+export const SmallSpinner = ({ color }: { color: string }) => {
   return (
     <div role="status">
       <svg

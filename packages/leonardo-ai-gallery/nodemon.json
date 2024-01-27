@@ -1,0 +1,6 @@
+{
+  "watch": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css"],
+  "ext": "ts,tsx,css",
+  "ignore": ["dist/", "node_modules/"],
+  "exec": "npm run dev:watched"
+}

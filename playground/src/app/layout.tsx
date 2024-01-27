@@ -20,13 +20,13 @@ export default function RootLayout({
       <body className={inter.className}>
         <nav className="p-4">
           <ul className="flex flex-row gap-6">
-            <li>
+            <li style={{ marginRight: 6 }}>
               <Link href="/">Home</Link>
             </li>
-            <li>
+            <li style={{ marginRight: 6 }}>
               <Link href="/model">Model</Link>
             </li>
-            <li>
+            <li style={{ marginRight: 6 }}>
               <Link href="/components">Components</Link>
             </li>
           </ul>

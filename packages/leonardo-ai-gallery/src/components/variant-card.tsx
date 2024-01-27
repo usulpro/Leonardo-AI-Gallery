@@ -264,6 +264,7 @@ export function VariantCard({ variations, token }: VariantCardProps) {
           type={TransformType.ORIGIN}
           isActive={variation.id === variations.sorted.original.id}
           onActivate={() => setVariation(variations.sorted.original)}
+          status={GenerationStatus.Pending}
           // status1
           // status2
         />
