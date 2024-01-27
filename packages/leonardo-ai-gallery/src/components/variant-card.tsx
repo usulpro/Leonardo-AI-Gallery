@@ -99,7 +99,7 @@ const VarianButton = ({
           {title}
         </span>
       ) : (
-        <SmallSpinner />
+        <SmallSpinner color={transformsMap[type || 'unknown'].color} />
       )}
       {status1 ? (
         <div className="absolute bottom-1 left-2 rounded-full bg-violet-500 w-1 h-1" />
@@ -264,7 +264,6 @@ export function VariantCard({ variations, token }: VariantCardProps) {
           type={TransformType.ORIGIN}
           isActive={variation.id === variations.sorted.original.id}
           onActivate={() => setVariation(variations.sorted.original)}
-          status={GenerationStatus.Complete}
           // status1
           // status2
         />
