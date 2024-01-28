@@ -15,6 +15,7 @@ import {
   createVariationJob,
   transformsMap,
 } from '../model';
+import { UseOptimisticReturn } from './lib/fetching';
 
 type VarianButtonProps = {
   title?: string;
@@ -184,9 +185,16 @@ type VariantCardProps = {
   url: string;
   variations: SortedVariations;
   token: string;
+  generationId?: string;
+  optimistic: UseOptimisticReturn;
 };
 
-export function VariantCard({ variations, token }: VariantCardProps) {
+export function VariantCard({
+  variations,
+  token,
+  optimistic,
+  generationId,
+}: VariantCardProps) {
   const [variation, setVariation] = React.useState<ImageVariation>(
     variations.plain[0],
   );
@@ -195,10 +203,25 @@ export function VariantCard({ variations, token }: VariantCardProps) {
     setVariation(v);
   };
 
-  const handleGenerateVariation = (type: TransformType) => {
+  const handleGenerateVariation = async (type: TransformType) => {
+    if (!generationId) {
+      console.warn(`Cant' init transformation job: no generation ID is passed`);
+      return;
+    }
     const isVariation = variations.sorted.original.id !== variation.id;
-    createVariationJob({ type, id: variation.id, token, isVariation });
-    return null;
+    const addJob = optimistic.initJob({
+      transformType: type,
+      generationId,
+      variationId: variations.sorted.original.id,
+    });
+    const result = await createVariationJob({
+      type,
+      id: variation.id,
+      token,
+      isVariation,
+    });
+    addJob(result);
+    return result;
   };
 
   return (

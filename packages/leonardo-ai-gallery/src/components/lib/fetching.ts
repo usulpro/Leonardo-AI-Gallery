@@ -1,8 +1,12 @@
 import React from 'react';
 import {
+  GenerationStatus,
   ImageGeneration,
+  OptimisticJob,
   ProcessedGeneration,
+  TransformType,
   UserInfo,
+  VariationJob,
   fetchGenerationsByUserId,
   fetchUserInfo,
 } from '../../model';
@@ -15,12 +19,64 @@ type UseAccountReturnType = {
   generations: ProcessedGeneration[];
   generationsError: boolean;
   getModelById: GetModelByIdFunction;
+  optimistic: UseOptimisticReturn;
 };
 
 type UseAccountProps = {
   token: string;
   limit: number;
   pages: number;
+};
+
+type AddJob = (job: VariationJob) => void;
+type InitJob = (props: {
+  transformType: TransformType;
+  generationId: string;
+  variationId: string;
+}) => AddJob;
+
+export type UseOptimisticReturn = {
+  initJob: InitJob;
+  optimisticJobs: OptimisticJob[];
+};
+
+const useOptimisticJobs = (): UseOptimisticReturn => {
+  const [jobs, setJobs] = React.useState<OptimisticJob[]>([]);
+  console.log('🚀 ~ useOptimisticJobs ~ jobs:', jobs);
+
+  const initJob: InitJob = ({ transformType, generationId, variationId }) => {
+    const optimisticJob: OptimisticJob = {
+      transformType,
+      generationId,
+      variationId,
+      status: GenerationStatus.OptimisticInit,
+    };
+    const newJobs = [...jobs, optimisticJob];
+    setJobs(newJobs);
+
+    const addJob: AddJob = (job) => {
+      setJobs((currentJobs) => {
+        const updatedJobs = currentJobs.map((j) => {
+          if (j !== optimisticJob) {
+            return j;
+          }
+          return {
+            ...optimisticJob,
+            status: GenerationStatus.Optimistic,
+            job,
+          };
+        });
+        return updatedJobs;
+      });
+    };
+
+    return addJob;
+  };
+
+  return {
+    initJob,
+    optimisticJobs: jobs,
+  };
 };
 
 export const useAccount = ({
@@ -39,6 +95,8 @@ export const useAccount = ({
   const maxOffset: number = (pages - 1) * limit + 1;
 
   const { getModelById } = usePlatformModels(token);
+
+  const optimistic = useOptimisticJobs();
 
   React.useDebugValue({
     userInfo,
@@ -86,18 +144,13 @@ export const useAccount = ({
       });
   }, [userInfo?.user?.id, offset]);
 
-  const generationSkeletons = new Array(limit)
-    .fill({ _isSkeleton: true })
-    .map((v, ind) => ({ id: `sk${ind}`, ...v }));
-
-  const processedGenerations: ProcessedGeneration[] = [
-    ...generations.map((g) => ({
-      ...g,
-      model: getModelById(g.modelId, g.photoReal),
-      _isSkeleton: false,
-    })),
-    ...(generationsLoading ? generationSkeletons : []),
-  ];
+  const processedGenerations: ProcessedGeneration[] = processGenerations({
+    limit,
+    generations,
+    getModelById,
+    generationsLoading,
+    optimisticJobs: optimistic.optimisticJobs,
+  });
 
   return {
     isUserLoading: !userInfo && !userError,
@@ -105,5 +158,36 @@ export const useAccount = ({
     generations: processedGenerations,
     generationsError,
     getModelById,
+    optimistic,
   };
 };
+
+function processGenerations({
+  limit,
+  generations,
+  getModelById,
+  generationsLoading,
+  optimisticJobs,
+}: {
+  limit: number;
+  generations: ImageGeneration[];
+  getModelById: GetModelByIdFunction;
+  generationsLoading: boolean;
+  optimisticJobs: OptimisticJob[];
+}) {
+  const optimisticGenerations = generations.map((g) => ({
+    ...g,
+    model: getModelById(g.modelId, g.photoReal),
+    _isSkeleton: false,
+  }));
+
+  const generationSkeletons = new Array(limit)
+    .fill({ _isSkeleton: true })
+    .map((v, ind) => ({ id: `sk${ind}`, ...v }));
+
+  const processedGenerations: ProcessedGeneration[] = [
+    ...optimisticGenerations,
+    ...(generationsLoading ? generationSkeletons : []),
+  ];
+  return processedGenerations;
+}

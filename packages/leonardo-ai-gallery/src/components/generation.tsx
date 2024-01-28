@@ -7,6 +7,7 @@ import { CardTitle, CardHeader, CardContent, Card } from './ui/card';
 import { GenerationCard } from './generation-card';
 import { VariantCard } from './variant-card';
 import { ImageGeneration, ProcessedGeneration, sortVariations } from '../model';
+import { UseOptimisticReturn } from './lib/fetching';
 
 // type GenerationProps = {
 //   promptTitle: string;
@@ -23,7 +24,9 @@ import { ImageGeneration, ProcessedGeneration, sortVariations } from '../model';
 //   negativePrompt: string;
 // };
 
-export function Generation(props: ProcessedGeneration) {
+export function Generation(
+  props: ProcessedGeneration & { optimistic: UseOptimisticReturn },
+) {
   const { generated_images, ...restProps } = props;
   const promptStart = (props?.prompt || '').slice(0, 26);
   const promptTitle =
@@ -55,8 +58,10 @@ export function Generation(props: ProcessedGeneration) {
             <VariantCard
               key={image.id}
               {...image}
+              generationId={props.id}
               variations={sortVariations(image)}
               token={props.token}
+              optimistic={props.optimistic}
             />
           ))}
         </div>

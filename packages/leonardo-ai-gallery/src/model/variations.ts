@@ -5,6 +5,7 @@ import {
   ImageVariation,
   SortedVariations,
   TransformType,
+  VariationJob,
 } from './types';
 
 export const sortVariations = (image: GeneratedImage): SortedVariations => {
@@ -45,11 +46,6 @@ export const sortVariations = (image: GeneratedImage): SortedVariations => {
   };
 };
 
-type VariationJob = {
-  id: string;
-  apiCreditCost?: null;
-};
-
 type createUnzoomJobProps = {
   token: string;
   id: string;
@@ -82,7 +78,7 @@ const createUnzoomJob = async ({
         `Error: no sdUnzoomJob in response - ${response.statusText}`,
       );
     }
-    return data;
+    return { ...data.sdUnzoomJob, transformType: TransformType.UNZOOM };
   } catch (error) {
     console.error('Error creating unzoom job:', error);
     throw error;
@@ -119,7 +115,7 @@ const createUpscaleJob = async ({
         `Error: no sdUpscaleJob in response - ${response.statusText}`,
       );
     }
-    return data.sdUpscaleJob;
+    return { ...data.sdUpscaleJob, transformType: TransformType.UPSCALE };
   } catch (error) {
     console.error('Error creating upscale job:', error);
     throw error;
@@ -158,7 +154,7 @@ const createNobgJob = async ({
         `Error: no sdNobgJob in response - ${response.statusText}`,
       );
     }
-    return data.sdNobgJob;
+    return { ...data.sdNobgJob, transformType: TransformType.NOBG };
   } catch (error) {
     console.error('Error creating no background job:', error);
     throw error;
@@ -174,7 +170,7 @@ export const transformsMap = {
     color: 'white',
     startJob: ({ id }: { id: string }) => {
       console.warn(`Can't start a job for Original type`);
-      return { id };
+      return { id, transformType: TransformType.ORIGIN };
     },
   },
   [TransformType.UPSCALE]: {

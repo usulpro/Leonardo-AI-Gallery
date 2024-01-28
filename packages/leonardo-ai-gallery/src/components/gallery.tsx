@@ -17,11 +17,12 @@ export const Gallery = ({ token, limit = 8, pages = 3 }: GalleryProps) => {
     insertCss(styles);
   }, []);
 
-  const { generations, isUserLoading, userInfo } = useAccount({
+  const { generations, isUserLoading, userInfo, optimistic } = useAccount({
     token,
     limit,
     pages,
   });
+
   return (
     <div>
       <Header
@@ -30,7 +31,12 @@ export const Gallery = ({ token, limit = 8, pages = 3 }: GalleryProps) => {
       />
       <div>
         {generations.map((gen) => (
-          <Generation key={gen.id} {...gen} token={token} />
+          <Generation
+            key={gen.id}
+            {...gen}
+            token={token}
+            optimistic={optimistic}
+          />
         ))}
       </div>
     </div>
