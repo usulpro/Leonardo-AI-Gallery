@@ -100,7 +100,10 @@ const VarianButton = ({
           {title}
         </span>
       ) : (
-        <SmallSpinner color={transformsMap[type || 'unknown'].color} />
+        <SmallSpinner
+          color={transformsMap[type || 'unknown'].color}
+          status={status}
+        />
       )}
       {status1 ? (
         <div className="absolute bottom-1 left-2 rounded-full bg-violet-500 w-1 h-1" />
@@ -161,7 +164,7 @@ const VariationsRow = ({
       <div className="text-[12px]  mr-1 w-8 text-nowrap flex-none">
         {transformsMap[type].title}:
       </div>
-      {variations.map((v, ind) => (
+      {variations.toReversed().map((v, ind) => (
         <VarianButton
           key={v.id}
           title={`${transformsMap[type].prefix}${ind + 1}`}

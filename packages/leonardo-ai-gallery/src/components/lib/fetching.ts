@@ -1,7 +1,9 @@
 import React from 'react';
 import {
+  GeneratedImage,
   GenerationStatus,
   ImageGeneration,
+  ImageVariation,
   OptimisticJob,
   ProcessedGeneration,
   TransformType,
@@ -175,11 +177,41 @@ function processGenerations({
   generationsLoading: boolean;
   optimisticJobs: OptimisticJob[];
 }) {
-  const optimisticGenerations = generations.map((g) => ({
-    ...g,
-    model: getModelById(g.modelId, g.photoReal),
-    _isSkeleton: false,
-  }));
+  const optimisticGenerations = generations.map((g) => {
+    const matchingJobs = optimisticJobs.filter((j) => j.generationId === g.id);
+    let matchingImages = g.generated_images;
+    if (matchingJobs.length > 0) {
+      const jobIDs = matchingJobs.map((j) => j.variationId);
+      matchingImages = g.generated_images.map((im) => {
+        if (!jobIDs.includes(im.id)) {
+          return im;
+        }
+        const jobs = matchingJobs.filter((j) => j.variationId === im.id);
+        const optimisticImage: GeneratedImage = {
+          ...im,
+          generated_image_variation_generics: [
+            ...im.generated_image_variation_generics,
+            ...jobs.map((j) => {
+              const variation: ImageVariation = {
+                id: j.job?.id || 'init',
+                status: j.status,
+                transformType: j.transformType,
+                url: '',
+              };
+              return variation;
+            }),
+          ],
+        };
+        return optimisticImage;
+      });
+    }
+    return {
+      ...g,
+      generated_images: matchingImages,
+      model: getModelById(g.modelId, g.photoReal),
+      _isSkeleton: false,
+    };
+  });
 
   const generationSkeletons = new Array(limit)
     .fill({ _isSkeleton: true })
