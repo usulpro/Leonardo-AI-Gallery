@@ -133,6 +133,7 @@ export type VariationJob = {
   id: string;
   apiCreditCost?: null;
   transformType: TransformType;
+  url?: string; // not coming at job init but add it after polling
 };
 
 export type OptimisticJob = {
@@ -143,4 +144,12 @@ export type OptimisticJob = {
   createdAt?: string;
   url?: string;
   job?: VariationJob;
+};
+
+export type FetchedJob = {
+  url: string;
+  status: GenerationStatus;
+  id: string;
+  createdAt: string;
+  transformType: TransformType;
 };

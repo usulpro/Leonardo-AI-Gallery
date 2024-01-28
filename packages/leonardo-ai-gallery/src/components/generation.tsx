@@ -7,7 +7,7 @@ import { CardTitle, CardHeader, CardContent, Card } from './ui/card';
 import { GenerationCard } from './generation-card';
 import { VariantCard } from './variant-card';
 import { ImageGeneration, ProcessedGeneration, sortVariations } from '../model';
-import { UseOptimisticReturn } from './lib/fetching';
+import { UseOptimisticReturn } from './lib/optimistic';
 
 // type GenerationProps = {
 //   promptTitle: string;

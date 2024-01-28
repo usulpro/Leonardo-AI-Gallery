@@ -15,7 +15,7 @@ import {
   createVariationJob,
   transformsMap,
 } from '../model';
-import { UseOptimisticReturn } from './lib/fetching';
+import { UseOptimisticReturn } from './lib/optimistic';
 
 type VarianButtonProps = {
   title?: string;
@@ -164,7 +164,7 @@ const VariationsRow = ({
       <div className="text-[12px]  mr-1 w-8 text-nowrap flex-none">
         {transformsMap[type].title}:
       </div>
-      {variations.toReversed().map((v, ind) => (
+      {variations.map((v, ind) => (
         <VarianButton
           key={v.id}
           title={`${transformsMap[type].prefix}${ind + 1}`}

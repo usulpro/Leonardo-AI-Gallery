@@ -1,5 +1,6 @@
 import { API_BASE_URL } from './config';
 import {
+  FetchedJob,
   GeneratedImage,
   GenerationStatus,
   ImageVariation,
@@ -229,3 +230,36 @@ export const createVariationJob = async ({
 };
 
 // 1a708ce2-1ad9-4695-a3a2-ca3d1900b3e7
+
+type FetchJobProps = {
+  token: string;
+  id: string;
+};
+
+export const fetchJob = async ({
+  token,
+  id,
+}: FetchJobProps): Promise<FetchedJob> => {
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/variations/${id}`, options);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data?.generated_image_variation_generic) {
+      throw new Error(`Error: can't get job status - ${response.statusText}`);
+    }
+    return data?.generated_image_variation_generic[0];
+  } catch (error) {
+    console.error('Error getting job status:', error);
+    throw error;
+  }
+};

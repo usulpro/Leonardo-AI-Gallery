@@ -1,19 +1,16 @@
 import React from 'react';
 import {
-  GeneratedImage,
-  GenerationStatus,
   ImageGeneration,
-  ImageVariation,
   OptimisticJob,
   ProcessedGeneration,
-  TransformType,
   UserInfo,
-  VariationJob,
   fetchGenerationsByUserId,
   fetchUserInfo,
 } from '../../model';
 
 import { GetModelByIdFunction, usePlatformModels } from './fetchPlatformModels';
+import { mergeOptimisticJobs } from './optimistic';
+import { UseOptimisticReturn, useOptimisticJobs } from './optimistic';
 
 type UseAccountReturnType = {
   isUserLoading: boolean;
@@ -28,57 +25,6 @@ type UseAccountProps = {
   token: string;
   limit: number;
   pages: number;
-};
-
-type AddJob = (job: VariationJob) => void;
-type InitJob = (props: {
-  transformType: TransformType;
-  generationId: string;
-  variationId: string;
-}) => AddJob;
-
-export type UseOptimisticReturn = {
-  initJob: InitJob;
-  optimisticJobs: OptimisticJob[];
-};
-
-const useOptimisticJobs = (): UseOptimisticReturn => {
-  const [jobs, setJobs] = React.useState<OptimisticJob[]>([]);
-  console.log('🚀 ~ useOptimisticJobs ~ jobs:', jobs);
-
-  const initJob: InitJob = ({ transformType, generationId, variationId }) => {
-    const optimisticJob: OptimisticJob = {
-      transformType,
-      generationId,
-      variationId,
-      status: GenerationStatus.OptimisticInit,
-    };
-    const newJobs = [...jobs, optimisticJob];
-    setJobs(newJobs);
-
-    const addJob: AddJob = (job) => {
-      setJobs((currentJobs) => {
-        const updatedJobs = currentJobs.map((j) => {
-          if (j !== optimisticJob) {
-            return j;
-          }
-          return {
-            ...optimisticJob,
-            status: GenerationStatus.Optimistic,
-            job,
-          };
-        });
-        return updatedJobs;
-      });
-    };
-
-    return addJob;
-  };
-
-  return {
-    initJob,
-    optimisticJobs: jobs,
-  };
 };
 
 export const useAccount = ({
@@ -98,7 +44,7 @@ export const useAccount = ({
 
   const { getModelById } = usePlatformModels(token);
 
-  const optimistic = useOptimisticJobs();
+  const optimistic = useOptimisticJobs(token);
 
   React.useDebugValue({
     userInfo,
@@ -177,41 +123,26 @@ function processGenerations({
   generationsLoading: boolean;
   optimisticJobs: OptimisticJob[];
 }) {
-  const optimisticGenerations = generations.map((g) => {
-    const matchingJobs = optimisticJobs.filter((j) => j.generationId === g.id);
-    let matchingImages = g.generated_images;
-    if (matchingJobs.length > 0) {
-      const jobIDs = matchingJobs.map((j) => j.variationId);
-      matchingImages = g.generated_images.map((im) => {
-        if (!jobIDs.includes(im.id)) {
-          return im;
-        }
-        const jobs = matchingJobs.filter((j) => j.variationId === im.id);
-        const optimisticImage: GeneratedImage = {
-          ...im,
-          generated_image_variation_generics: [
-            ...im.generated_image_variation_generics,
-            ...jobs.map((j) => {
-              const variation: ImageVariation = {
-                id: j.job?.id || 'init',
-                status: j.status,
-                transformType: j.transformType,
-                url: '',
-              };
-              return variation;
-            }),
-          ],
-        };
-        return optimisticImage;
-      });
-    }
+  const revertedGenerations: ImageGeneration[] = generations.map((g) => {
     return {
       ...g,
-      generated_images: matchingImages,
-      model: getModelById(g.modelId, g.photoReal),
-      _isSkeleton: false,
+      generated_images: g.generated_images
+        .map((im) => ({
+          ...im,
+          generated_image_variation_generics:
+            // @ts-ignore // Note: doesn't TS know `toReversed`?
+            im.generated_image_variation_generics.toReversed(),
+        }))
+        // @ts-ignore
+        .toReversed(),
     };
   });
+
+  const optimisticGenerations = mergeOptimisticJobs(
+    revertedGenerations,
+    optimisticJobs,
+    getModelById,
+  );
 
   const generationSkeletons = new Array(limit)
     .fill({ _isSkeleton: true })
