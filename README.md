@@ -10,6 +10,9 @@ TBD
 ## Documentation
 For more detailed documentation, see the `/docs` folder.
 
+Sanity Custom Assets Source https://www.sanity.io/docs/custom-asset-sources
+
+
 ## Chatbot Integration and Guidance
 
 This section provides essential information for chatbots interfacing with our project. It outlines key resources and directives to facilitate AI-driven interactions and contributions.
