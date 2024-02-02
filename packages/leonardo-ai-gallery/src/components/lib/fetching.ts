@@ -87,10 +87,16 @@ const useGenerationFetching = ({
       });
   }, [userInfo?.user?.id, offset]);
 
+  const reset = () => {
+    setOffset(0);
+    setGenerations([]);
+  };
+
   return {
     generations,
     generationsLoading,
     generationsError,
+    reset,
   };
 };
 
@@ -101,6 +107,7 @@ type UseAccountReturnType = {
   generationsError: boolean;
   getModelById: GetModelByIdFunction;
   optimistic: UseOptimisticReturn;
+  refresh: () => void;
 };
 
 type UseAccountProps = {
@@ -119,7 +126,7 @@ export const useAccount = ({
   const [userInfo, setUserInfo] = React.useState<UserInfo | null>(null);
   const [userError, setUserError] = React.useState<boolean>(false);
 
-  const { generations, generationsError, generationsLoading } =
+  const { generations, generationsError, generationsLoading, reset } =
     useGenerationFetching({ token, limit, pages, userInfo });
 
   const { getModelById } = usePlatformModels(token);
@@ -143,10 +150,9 @@ export const useAccount = ({
       });
   }, [token]);
 
-  // React.useEffect(() => {
-  //   setOffset(0);
-  //   setGenerations([]);
-  // }, [pollingTime]);
+  React.useEffect(() => {
+    reset();
+  }, [pollingTime]);
 
   const processedGenerations: ProcessedGeneration[] = processGenerations({
     limit,
@@ -163,6 +169,7 @@ export const useAccount = ({
     generationsError,
     getModelById,
     optimistic,
+    refresh,
   };
 };
 

@@ -10,24 +10,36 @@ type GalleryProps = {
   token: string;
   limit?: number;
   pages?: number;
+  options?: {
+    pollingTimeout?: number;
+  };
 };
 
-export const Gallery = ({ token, limit = 8, pages = 3 }: GalleryProps) => {
+export const Gallery = ({
+  token,
+  limit = 8,
+  pages = 3,
+  options = {},
+}: GalleryProps) => {
+  const { pollingTimeout = 30 * 1000 } = options;
   React.useEffect(() => {
     insertCss(styles);
   }, []);
 
-  const { generations, isUserLoading, userInfo, optimistic } = useAccount({
-    token,
-    limit,
-    pages,
-  });
+  const { generations, isUserLoading, userInfo, optimistic, refresh } =
+    useAccount({
+      token,
+      limit,
+      pages,
+      pollingTimeout,
+    });
 
   return (
     <div>
       <Header
         userIsLoading={isUserLoading}
         userName={userInfo?.user.username}
+        onRefresh={refresh}
       />
       <div>
         {generations.map((gen) => (
