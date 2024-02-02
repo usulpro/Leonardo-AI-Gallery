@@ -32,30 +32,19 @@ const useGenerationPolling = (pollingTimeout: number = 30 * 1000) => {
   };
 };
 
-type UseAccountReturnType = {
-  isUserLoading: boolean;
-  userInfo: UserInfo | null;
-  generations: ProcessedGeneration[];
-  generationsError: boolean;
-  getModelById: GetModelByIdFunction;
-  optimistic: UseOptimisticReturn;
-};
-
-type UseAccountProps = {
+type UseGenerationFetchingProps = {
   token: string;
   limit: number;
   pages: number;
-  pollingTimeout: number;
+  userInfo: UserInfo | null;
 };
 
-export const useAccount = ({
+const useGenerationFetching = ({
   token,
   limit,
   pages,
-  pollingTimeout,
-}: UseAccountProps): UseAccountReturnType => {
-  const [userInfo, setUserInfo] = React.useState<UserInfo | null>(null);
-  const [userError, setUserError] = React.useState<boolean>(false);
+  userInfo,
+}: UseGenerationFetchingProps) => {
   const [generations, setGenerations] = React.useState<ImageGeneration[]>([]);
   const [generationsError, setGenerationsError] =
     React.useState<boolean>(false);
@@ -64,27 +53,9 @@ export const useAccount = ({
   const [offset, setOffset] = React.useState<number>(0);
   const maxOffset: number = (pages - 1) * limit + 1;
 
-  const { getModelById } = usePlatformModels(token);
-
-  const optimistic = useOptimisticJobs(token);
-  const { pollingTime, refresh } = useGenerationPolling(pollingTimeout);
-
   React.useDebugValue({
-    userInfo,
-    limit,
-    pages,
     offset,
   });
-
-  React.useEffect(() => {
-    setUserError(false);
-    fetchUserInfo(token)
-      .then(setUserInfo)
-      .catch((error) => {
-        console.error(error);
-        setUserError(true);
-      });
-  }, [token]);
 
   React.useEffect(() => {
     if (!userInfo?.user) {
@@ -115,12 +86,67 @@ export const useAccount = ({
         setGenerationsLoading(false);
       });
   }, [userInfo?.user?.id, offset]);
-  console.log('🚀 ~ React.useEffect ~ offset:', offset);
+
+  return {
+    generations,
+    generationsLoading,
+    generationsError,
+  };
+};
+
+type UseAccountReturnType = {
+  isUserLoading: boolean;
+  userInfo: UserInfo | null;
+  generations: ProcessedGeneration[];
+  generationsError: boolean;
+  getModelById: GetModelByIdFunction;
+  optimistic: UseOptimisticReturn;
+};
+
+type UseAccountProps = {
+  token: string;
+  limit: number;
+  pages: number;
+  pollingTimeout: number;
+};
+
+export const useAccount = ({
+  token,
+  limit,
+  pages,
+  pollingTimeout,
+}: UseAccountProps): UseAccountReturnType => {
+  const [userInfo, setUserInfo] = React.useState<UserInfo | null>(null);
+  const [userError, setUserError] = React.useState<boolean>(false);
+
+  const { generations, generationsError, generationsLoading } =
+    useGenerationFetching({ token, limit, pages, userInfo });
+
+  const { getModelById } = usePlatformModels(token);
+
+  const optimistic = useOptimisticJobs(token);
+  const { pollingTime, refresh } = useGenerationPolling(pollingTimeout);
+
+  React.useDebugValue({
+    userInfo,
+    limit,
+    pages,
+  });
 
   React.useEffect(() => {
-    setOffset(0);
-    setGenerations([]);
-  }, [pollingTime]);
+    setUserError(false);
+    fetchUserInfo(token)
+      .then(setUserInfo)
+      .catch((error) => {
+        console.error(error);
+        setUserError(true);
+      });
+  }, [token]);
+
+  // React.useEffect(() => {
+  //   setOffset(0);
+  //   setGenerations([]);
+  // }, [pollingTime]);
 
   const processedGenerations: ProcessedGeneration[] = processGenerations({
     limit,
