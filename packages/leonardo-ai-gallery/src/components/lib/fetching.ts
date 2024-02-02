@@ -12,6 +12,26 @@ import { GetModelByIdFunction, usePlatformModels } from './fetchPlatformModels';
 import { mergeOptimisticJobs } from './optimistic';
 import { UseOptimisticReturn, useOptimisticJobs } from './optimistic';
 
+const useGenerationPolling = (pollingTimeout: number = 30 * 1000) => {
+  const [time, setTime] = React.useState<Date | null>(null);
+
+  const refresh = () => {
+    setTime(new Date());
+  };
+
+  React.useEffect(() => {
+    const timeoutID = setTimeout(refresh, pollingTimeout);
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [time]);
+
+  return {
+    pollingTime: time,
+    refresh,
+  };
+};
+
 type UseAccountReturnType = {
   isUserLoading: boolean;
   userInfo: UserInfo | null;
@@ -25,12 +45,14 @@ type UseAccountProps = {
   token: string;
   limit: number;
   pages: number;
+  pollingTimeout: number;
 };
 
 export const useAccount = ({
   token,
   limit,
   pages,
+  pollingTimeout,
 }: UseAccountProps): UseAccountReturnType => {
   const [userInfo, setUserInfo] = React.useState<UserInfo | null>(null);
   const [userError, setUserError] = React.useState<boolean>(false);
@@ -45,6 +67,7 @@ export const useAccount = ({
   const { getModelById } = usePlatformModels(token);
 
   const optimistic = useOptimisticJobs(token);
+  const { pollingTime, refresh } = useGenerationPolling(pollingTimeout);
 
   React.useDebugValue({
     userInfo,
@@ -67,6 +90,7 @@ export const useAccount = ({
     if (!userInfo?.user) {
       return;
     }
+    offset;
     setGenerationsError(false);
     setGenerationsLoading(true);
     fetchGenerationsByUserId({
@@ -91,6 +115,12 @@ export const useAccount = ({
         setGenerationsLoading(false);
       });
   }, [userInfo?.user?.id, offset]);
+  console.log('🚀 ~ React.useEffect ~ offset:', offset);
+
+  React.useEffect(() => {
+    setOffset(0);
+    setGenerations([]);
+  }, [pollingTime]);
 
   const processedGenerations: ProcessedGeneration[] = processGenerations({
     limit,
