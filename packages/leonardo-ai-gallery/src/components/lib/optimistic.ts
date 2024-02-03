@@ -102,21 +102,38 @@ export function mergeOptimisticJobs(
           return im;
         }
         const jobs = matchingJobs.filter((j) => j.variationId === im.id);
+        const optimisticVariations: ImageVariation[] = jobs.map((j) => {
+          const variation: ImageVariation = {
+            id: j.job?.id || 'init',
+            status: j.status,
+            transformType: j.transformType,
+            url: j.job?.url || '',
+          };
+          return variation;
+        });
+        const existingVariationsIDs: string[] =
+          im.generated_image_variation_generics.map((vr) => vr.id);
+        const existingOptimisticVariations = optimisticVariations.filter((vr) =>
+          existingVariationsIDs.includes(vr.id),
+        );
+        const newOptimisticVariations = optimisticVariations.filter(
+          (vr) => !existingVariationsIDs.includes(vr.id),
+        );
+        const updatedExistingVariations =
+          im.generated_image_variation_generics.map((vr) => {
+            const optimisticVr = existingOptimisticVariations.find(
+              (evr) => evr.id === vr.id,
+            );
+            return optimisticVr || vr;
+          });
         const optimisticImage: GeneratedImage = {
           ...im,
           generated_image_variation_generics: [
-            ...im.generated_image_variation_generics,
-            ...jobs.map((j) => {
-              const variation: ImageVariation = {
-                id: j.job?.id || 'init',
-                status: j.status,
-                transformType: j.transformType,
-                url: j.job?.url || '',
-              };
-              return variation;
-            }),
+            ...updatedExistingVariations,
+            ...newOptimisticVariations,
           ],
         };
+
         return optimisticImage;
       });
     }
