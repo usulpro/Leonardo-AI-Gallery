@@ -7,6 +7,10 @@ type Optional<T> = {
 export enum GenerationStatus {
   Complete = 'COMPLETE',
   Pending = 'PENDING',
+  Failed = 'FAILED',
+  /* Statuses below not exist on the platform - we use it internally */
+  Optimistic = 'OPTIMISTIC',
+  OptimisticInit = 'OPTIMISTIC_INIT',
 }
 
 export enum TransformType {
@@ -80,6 +84,7 @@ export type ImageGeneration = {
 export type ProcessedGeneration = Optional<ImageGeneration> & {
   model?: CustomModel;
   _isSkeleton: boolean;
+  token: string;
 };
 
 export type UserInfo = {
@@ -122,5 +127,29 @@ export type SortedVariations = {
 
 export type TransformProps = {
   title: string;
+};
 
+export type VariationJob = {
+  id: string;
+  apiCreditCost?: null;
+  transformType: TransformType;
+  url?: string; // not coming at job init but add it after polling
+};
+
+export type OptimisticJob = {
+  transformType: TransformType;
+  generationId: string;
+  variationId: string;
+  status: GenerationStatus;
+  createdAt?: string;
+  url?: string;
+  job?: VariationJob;
+};
+
+export type FetchedJob = {
+  url: string;
+  status: GenerationStatus;
+  id: string;
+  createdAt: string;
+  transformType: TransformType;
 };
