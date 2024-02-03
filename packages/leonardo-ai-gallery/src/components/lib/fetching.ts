@@ -105,6 +105,7 @@ type UseAccountReturnType = {
   userInfo: UserInfo | null;
   generations: ProcessedGeneration[];
   generationsError: boolean;
+  generationsLoading: boolean;
   getModelById: GetModelByIdFunction;
   optimistic: UseOptimisticReturn;
   refresh: () => void;
@@ -167,6 +168,7 @@ export const useAccount = ({
     userInfo,
     generations: processedGenerations,
     generationsError,
+    generationsLoading,
     getModelById,
     optimistic,
     refresh,

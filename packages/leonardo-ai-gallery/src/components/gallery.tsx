@@ -26,12 +26,13 @@ export const Gallery = ({
     insertCss(styles);
   }, []);
 
-  const { generations, isUserLoading, userInfo, optimistic, refresh } =
+  const { generations, isUserLoading, userInfo, optimistic, refresh, generationsLoading } =
     useAccount({
       token,
       limit,
       pages,
       pollingTimeout,
+
     });
 
   return (
@@ -39,7 +40,10 @@ export const Gallery = ({
       <Header
         userIsLoading={isUserLoading}
         userName={userInfo?.user.username}
+        subscriptionTokens={userInfo?.subscriptionTokens}
         onRefresh={refresh}
+        isLoading={generationsLoading}
+        isUserLoading={isUserLoading}
       />
       <div>
         {generations.map((gen) => (

@@ -82,3 +82,13 @@ export const SmallSpinner = ({
     </div>
   );
 };
+
+export const DotsLoader = () => {
+  return (
+    <div className="flex flex-row gap-2">
+      <div className="w-2 h-2 rounded-full bg-violet-600 animate-bounce"></div>
+      <div className="w-2 h-2 rounded-full bg-violet-600 animate-bounce" style={{ animationDelay: "-.3s" }}></div>
+      <div className="w-2 h-2 rounded-full bg-violet-600 animate-bounce" style={{ animationDelay: "-.5s" }}></div>
+    </div>
+  );
+};
