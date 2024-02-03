@@ -127,6 +127,7 @@ export const useAccount = ({
   const [userInfo, setUserInfo] = React.useState<UserInfo | null>(null);
   const [userError, setUserError] = React.useState<boolean>(false);
 
+  const storedGenerations = React.useRef<ImageGeneration[]>([]);
   const { generations, generationsError, generationsLoading, reset } =
     useGenerationFetching({ token, limit, pages, userInfo });
 
@@ -155,9 +156,15 @@ export const useAccount = ({
     reset();
   }, [pollingTime]);
 
+  const mergedGenerations = mergeGenerations(
+    storedGenerations.current,
+    generations,
+  );
+  storedGenerations.current = mergedGenerations;
+
   const processedGenerations: ProcessedGeneration[] = processGenerations({
     limit,
-    generations,
+    generations: storedGenerations.current,
     getModelById,
     generationsLoading,
     optimisticJobs: optimistic.optimisticJobs,
@@ -174,6 +181,27 @@ export const useAccount = ({
     refresh,
   };
 };
+
+function mergeGenerations(
+  prevGens: ImageGeneration[],
+  newGens: ImageGeneration[],
+): ImageGeneration[] {
+  const allGens = [...newGens, ...prevGens];
+  const allIDs = new Set(allGens.map((g) => g.id));
+
+  // @ts-ignore
+  const mergedGens: ImageGeneration[] = [...allIDs.values()].map((id) =>
+    allGens.find((g) => g.id === id),
+  );
+
+  const sortedGens = mergedGens.sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  return sortedGens;
+}
 
 function processGenerations({
   limit,

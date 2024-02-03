@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <nav className="p-4">
+        {/* <nav className="p-4">
           <ul className="flex flex-row gap-6">
             <li style={{ marginRight: 6 }}>
               <Link href="/">Home</Link>
@@ -30,7 +30,7 @@ export default function RootLayout({
               <Link href="/components">Components</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
         {children}
       </body>
     </html>
