@@ -4,7 +4,13 @@ React component for displaying user images from Leonardo AI account.
 
 ## Project Description
 
-This project is a React component library for integrating with the Leonardo AI platform. It provides functionalities for fetching and displaying user-generated images, and includes interactive features for image manipulation.
+```console
+
+npm i leonardo-ai-gallery
+
+```
+
+This project is a React component that integrates with the Leonardo AI platform. It provides functionalities for fetching and displaying user-generated images, image variants, and manually launching generation jobs.
 
 [Live Demo](https://leonardo-ai-gallery-playground.vercel.app/)
 
