@@ -1,11 +1,16 @@
 {
   "private": true,
   "workspaces": [
-    "packages/*",
+    "packages/leonardo-ai-gallery",
     "playground"
   ],
   "scripts": {
-    "dev": "npm run dev"
+    "dev": "ultra -r dev",
+    "build": "ultra -r build",
+    "start": "ultra -r start"
   },
-  "packageManager": "npm@10.1.0"
+  "packageManager": "npm@10.1.0",
+  "devDependencies": {
+    "ultra-runner": "^3.10.5"
+  }
 }
