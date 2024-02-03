@@ -45,7 +45,8 @@ Sanity Custom Assets Source https://www.sanity.io/docs/custom-asset-sources
 
 ## Preview & Screenshots
 
-[![demo](/docs/LeonardoAI-Gallery-demo.webm)](/docs/LeonardoAI-Gallery-demo.webm)
+https://github.com/usulpro/Leonardo-AI-Gallery/assets/14885189/ac4987a8-3f57-477f-aa16-0d7edde3c2f4
+
 
 ## Chatbot Integration and Guidance
 
