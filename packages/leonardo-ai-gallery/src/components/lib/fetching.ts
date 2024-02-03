@@ -189,10 +189,9 @@ function mergeGenerations(
   const allGens = [...newGens, ...prevGens];
   const allIDs = new Set(allGens.map((g) => g.id));
 
-  // @ts-ignore
-  const mergedGens: ImageGeneration[] = [...allIDs.values()].map((id) =>
-    allGens.find((g) => g.id === id),
-  );
+  const mergedGens = [...allIDs]
+    .map((id) => allGens.find((g) => g.id === id))
+    .filter(Boolean) as ImageGeneration[];
 
   const sortedGens = mergedGens.sort((a, b) => {
     const dateA = new Date(a.createdAt);

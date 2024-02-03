@@ -15,6 +15,16 @@ type GalleryProps = {
   };
 };
 
+function isBrowserEnv() {
+  try {
+    return (
+      typeof window !== 'undefined' && typeof window.document !== 'undefined'
+    );
+  } catch (e) {
+    return false;
+  }
+}
+
 export const Gallery = ({
   token,
   limit = 8,
@@ -22,18 +32,24 @@ export const Gallery = ({
   options = {},
 }: GalleryProps) => {
   const { pollingTimeout = 30 * 1000 } = options;
-  React.useEffect(() => {
+
+  if (isBrowserEnv()) {
     insertCss(styles);
-  }, []);
+  }
 
-  const { generations, isUserLoading, userInfo, optimistic, refresh, generationsLoading } =
-    useAccount({
-      token,
-      limit,
-      pages,
-      pollingTimeout,
-
-    });
+  const {
+    generations,
+    isUserLoading,
+    userInfo,
+    optimistic,
+    refresh,
+    generationsLoading,
+  } = useAccount({
+    token,
+    limit,
+    pages,
+    pollingTimeout,
+  });
 
   return (
     <div>
@@ -42,7 +58,7 @@ export const Gallery = ({
         userName={userInfo?.user.username}
         subscriptionTokens={userInfo?.subscriptionTokens}
         onRefresh={refresh}
-        isLoading={generationsLoading}
+        isLoading={generationsLoading || isUserLoading}
         isUserLoading={isUserLoading}
       />
       <div>
