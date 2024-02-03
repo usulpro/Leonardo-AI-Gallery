@@ -104,13 +104,6 @@ export function GenerationCard({
           <p className="text-sm">{date}</p>
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-400">Pipeline</p>
-          <div className="flex items-center">
-            <CheckCircleIcon className="text-green-500 mr-1" />
-            {/* <p className="text-sm">{pipeline}</p> */}
-          </div>
-        </div>
-        <div>
           <p className="text-sm font-medium text-gray-400">Seed</p>
           <p className="text-sm">
             <Input
@@ -151,12 +144,12 @@ export function GenerationCard({
           color: 'white',
         }}
       />
-      <Textarea
+      {/* <Textarea
         className="bg-[#4d4d4d] text-gray-400 mb-4"
         placeholder="nsfw, nude, nudity, text"
         value={currentNegativePrompt}
         onChange={(e) => setNegativePrompt(e.target.value)}
-      />
+      /> */}
       <Button
         className="bg-blue-500 hover:bg-blue-600 w-full py-3 rounded-md"
         onClick={handleRegenerate}

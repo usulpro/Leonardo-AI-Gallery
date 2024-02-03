@@ -152,9 +152,9 @@ export const useAccount = ({
       });
   }, [token]);
 
-  React.useEffect(() => {
-    reset();
-  }, [pollingTime]);
+  // React.useEffect(() => {
+  //   reset();
+  // }, [pollingTime]);
 
   const mergedGenerations = mergeGenerations(
     storedGenerations.current,
