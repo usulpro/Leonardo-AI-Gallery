@@ -15,7 +15,8 @@
     "dev": "nodemon",
     "build:tailwind": "tailwindcss -i ./src/components/main.css -o ./dist/styles.css --minify",
     "build:ts": "tsc",
-    "build": "npm run build:ts && npm run build:tailwind && npm run build:css-to-js"
+    "build": "npm run build:ts && npm run build:tailwind && npm run build:css-to-js",
+    "prepare": "npm run build"
   },
   "author": "Oleg Proskurin <regx@usul.su>",
   "license": "MIT",
