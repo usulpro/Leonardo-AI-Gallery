@@ -49,5 +49,9 @@
     "clsx": "^2.1.0",
     "insert-css": "^2.0.0",
     "tailwind-merge": "^2.2.1"
-  }
+  },
+  "files": [
+    "dist"
+  ],
+  "style": "dist/styles.css"
 }

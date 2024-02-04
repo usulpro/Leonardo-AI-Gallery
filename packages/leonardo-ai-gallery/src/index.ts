@@ -1,2 +1,2 @@
 export * from './model';
-export * from './components';
+export { ServerGalleryWrapper as Gallery } from './components';

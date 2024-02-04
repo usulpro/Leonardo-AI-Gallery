@@ -61,7 +61,6 @@ const useGenerationFetching = ({
     if (!userInfo?.user) {
       return;
     }
-    offset;
     setGenerationsError(false);
     setGenerationsLoading(true);
     fetchGenerationsByUserId({
@@ -88,6 +87,7 @@ const useGenerationFetching = ({
   }, [userInfo?.user?.id, offset]);
 
   const reset = () => {
+    console.log("🚀 ~ reset ~ reset:")
     setOffset(0);
     setGenerations([]);
   };
@@ -152,9 +152,9 @@ export const useAccount = ({
       });
   }, [token]);
 
-  // React.useEffect(() => {
-  //   reset();
-  // }, [pollingTime]);
+  React.useEffect(() => {
+    reset();
+  }, [pollingTime]);
 
   const mergedGenerations = mergeGenerations(
     storedGenerations.current,
