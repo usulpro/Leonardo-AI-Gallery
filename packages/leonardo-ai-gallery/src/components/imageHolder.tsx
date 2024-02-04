@@ -61,9 +61,19 @@ type Props = {
 
 export const ImageHolder = ({ alt, src, imageHeight, imageWidth }: Props) => {
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
+  const imgRef = React.useRef<HTMLImageElement>(null);
 
   const sizes = calcImageSize(imageWidth, imageHeight, expandedSettings);
   React.useDebugValue({ sizes });
+
+  React.useEffect(() => {
+    if (!imgRef.current) {
+      return;
+    }
+    if (imgRef.current.complete) {
+      setIsLoaded(true);
+    }
+  }, []);
 
   return (
     <div
@@ -71,6 +81,7 @@ export const ImageHolder = ({ alt, src, imageHeight, imageWidth }: Props) => {
       style={{ width: sizes.width, height: sizes.height }}
     >
       <img
+        ref={imgRef}
         alt={alt}
         className="w-full"
         src={src}
@@ -78,10 +89,12 @@ export const ImageHolder = ({ alt, src, imageHeight, imageWidth }: Props) => {
           objectFit: 'contain',
         }}
         loading="lazy"
-        onLoad={() => setIsLoaded(true)}
+        onLoad={() => {
+          setTimeout(() => setIsLoaded(true), 500);
+        }}
       />
       {isLoaded ? null : (
-        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-slate-800 opacity-80">
           <div>Loading...</div>
         </div>
       )}
