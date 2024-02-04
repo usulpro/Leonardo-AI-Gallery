@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { CardHeader, CardContent, CardFooter, Card } from './ui/card';
+import { ImageHolder } from './imageHolder';
 import { Button } from './ui/button';
 import { ImageSkeleton, SmallSpinner } from './ui/skeletons';
 import { ExpandIcon, SmileIcon, UploadIcon } from './icons/v0';
@@ -190,6 +191,8 @@ type VariantCardProps = {
   token: string;
   generationId?: string;
   optimistic: UseOptimisticReturn;
+  imageHeight: number;
+  imageWidth: number;
 };
 
 export function VariantCard({
@@ -197,6 +200,8 @@ export function VariantCard({
   token,
   optimistic,
   generationId,
+  imageHeight,
+  imageWidth,
 }: VariantCardProps) {
   const [variation, setVariation] = React.useState<ImageVariation>(
     variations.plain[0],
@@ -231,7 +236,7 @@ export function VariantCard({
     <Card
       className=" bg-gray-800 text-white"
       style={{
-        width: 320,
+        // width: 320,
         borderWidth: '3px',
         borderStyle: 'solid',
         borderImage:
@@ -252,17 +257,12 @@ export function VariantCard({
       </CardHeader>
       <CardContent className="relative group p-0">
         {variation.status === GenerationStatus.Complete ? (
-          <img
-            alt={transformsMap[variation.transformType].header}
-            className="w-full"
-            height="400"
+          <ImageHolder
+            key={variation.url}
             src={variation.url}
-            style={{
-              aspectRatio: '655/400',
-              objectFit: 'cover',
-            }}
-            width="655"
-            loading="lazy"
+            alt={transformsMap[variation.transformType].header}
+            imageWidth={imageWidth}
+            imageHeight={imageHeight}
           />
         ) : (
           <div className="w-full h-[200px] flex justify-center items-center overflow-hidden">
