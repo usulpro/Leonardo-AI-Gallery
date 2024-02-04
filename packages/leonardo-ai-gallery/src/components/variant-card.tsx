@@ -191,8 +191,8 @@ type VariantCardProps = {
   token: string;
   generationId?: string;
   optimistic: UseOptimisticReturn;
-  imageHeight: number;
-  imageWidth: number;
+  imageHeight?: number;
+  imageWidth?: number;
 };
 
 export function VariantCard({
@@ -200,8 +200,8 @@ export function VariantCard({
   token,
   optimistic,
   generationId,
-  imageHeight,
-  imageWidth,
+  imageHeight = 512,
+  imageWidth =  768,
 }: VariantCardProps) {
   const [variation, setVariation] = React.useState<ImageVariation>(
     variations.plain[0],
