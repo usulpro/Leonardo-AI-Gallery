@@ -7,6 +7,7 @@ import { Generation } from './generation';
 import Header from './header';
 import { useAccount } from './lib/fetching';
 import { GalleryProps } from './types';
+import { ImageGeneration } from '../model/types.js';
 
 function isBrowserEnv() {
   try {
@@ -43,6 +44,7 @@ export const Gallery = ({
     limit,
     pages,
     pollingTimeout,
+    initialGenerations: serverFetchedGenerations as ImageGeneration[],
   });
 
   const currentGenerations =

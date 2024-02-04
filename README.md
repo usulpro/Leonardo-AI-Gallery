@@ -26,6 +26,8 @@ This project is a React component that integrates with the Leonardo AI platform.
 - Download images. In Roadmap
 - Custom additional actions on images. In Roadmap
 - Headless CMS integrations. In Roadmap
+- SSR & RSC support. You can pre-render this component on server-side with NextJS.
+
 
 ## Documentation
 
@@ -41,18 +43,68 @@ import { Gallery } from 'leonardo-ai-gallery';
 const token = process.env.NEXT_PUBLIC_LEONARDO_API_TOKEN;
 
 export default function Home() {
-  return <Gallery token={token!} pages={3} limit={3}/>;
+  return <Gallery token={token!} pages={3} limit={3} />;
 }
 ```
 
+### SSR and RSC Support
 
+You can prefetch generations on Server Side:
+
+```tsx
+import {
+  Gallery,
+  fetchGenerationsByUserId,
+  fetchUserInfo,
+} from 'leonardo-ai-gallery';
+
+const token = process.env.NEXT_PUBLIC_LEONARDO_API_TOKEN;
+
+export default async function Home() {
+  const user = await fetchUserInfo(token!);
+  const generations = await fetchGenerationsByUserId({
+    token: token!,
+    offset: 0,
+    limit: 9,
+    userId: user.user.id,
+  });
+  return (
+    <Gallery
+      token={token!}
+      pages={3}
+      limit={3}
+      serverFetchedGenerations={generations}
+    />
+  );
+}
+```
+
+In this case the Gallery will be rendered on server and included on initial page.
+
+### CSS Framework agnostic
+
+The component comes with CSS styles, that will be injected into a page head with a `<style>` tag as component code is loaded. That means you don't need to push any additional effort to inject CSS styles for the component, styles will be loaded automatically on hydration step.
+
+```tsx
+// imports Gallery component and injects <style> tag into a page
+import { Gallery } from 'leonardo-ai-gallery';
+```
+
+While in most scenarios this would be enough, you might want to insert CSS directly into a page on the server side. For that you can import `styles.css` from the package:
+
+```tsx
+import { Gallery } from 'leonardo-ai-gallery';
+// imports CSS styles for the Gallery
+import 'leonardo-ai-gallery/dist/styles.css';
+```
+
+You need an appropriate loader to handle CSS files
 
 Sanity Custom Assets Source https://www.sanity.io/docs/custom-asset-sources
 
 ## Preview & Screenshots
 
 https://github.com/usulpro/Leonardo-AI-Gallery/assets/14885189/ac4987a8-3f57-477f-aa16-0d7edde3c2f4
-
 
 ## Chatbot Integration and Guidance
 
