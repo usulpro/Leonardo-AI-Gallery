@@ -9,21 +9,6 @@ import { VariantCard } from './variant-card';
 import { ImageGeneration, ProcessedGeneration, sortVariations } from '../model';
 import { UseOptimisticReturn } from './lib/optimistic';
 
-// type GenerationProps = {
-//   promptTitle: string;
-//   modelName: string;
-//   inputResolution: string;
-//   createdDate: string;
-//   pipeline: string;
-//   seed: number;
-//   preset: string;
-//   promptMagic: string;
-//   initStrength: string;
-//   highContrast: string;
-//   prompt: string;
-//   negativePrompt: string;
-// };
-
 export function Generation(
   props: ProcessedGeneration & { optimistic: UseOptimisticReturn },
 ) {
@@ -52,12 +37,13 @@ export function Generation(
         />
         <div
           className="flex flex-row flex-wrap gap-4"
-          // style={{ flexWrap: 'wrap' }}
         >
           {(generated_images || []).map((image) => (
             <VariantCard
               key={image.id}
               {...image}
+              imageHeight={props.imageHeight}
+              imageWidth={props.imageWidth}
               generationId={props.id}
               variations={sortVariations(image)}
               token={props.token}

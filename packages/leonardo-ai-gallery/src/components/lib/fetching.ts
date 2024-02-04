@@ -37,6 +37,7 @@ type UseGenerationFetchingProps = {
   limit: number;
   pages: number;
   userInfo: UserInfo | null;
+  initialGenerations?: ImageGeneration[]
 };
 
 const useGenerationFetching = ({
@@ -44,8 +45,9 @@ const useGenerationFetching = ({
   limit,
   pages,
   userInfo,
+  initialGenerations = [],
 }: UseGenerationFetchingProps) => {
-  const [generations, setGenerations] = React.useState<ImageGeneration[]>([]);
+  const [generations, setGenerations] = React.useState<ImageGeneration[]>(initialGenerations);
   const [generationsError, setGenerationsError] =
     React.useState<boolean>(false);
   const [generationsLoading, setGenerationsLoading] =
@@ -61,7 +63,6 @@ const useGenerationFetching = ({
     if (!userInfo?.user) {
       return;
     }
-    offset;
     setGenerationsError(false);
     setGenerationsLoading(true);
     fetchGenerationsByUserId({
@@ -88,6 +89,7 @@ const useGenerationFetching = ({
   }, [userInfo?.user?.id, offset]);
 
   const reset = () => {
+    console.log('🚀 ~ reset ~ reset:');
     setOffset(0);
     setGenerations([]);
   };
@@ -116,6 +118,7 @@ type UseAccountProps = {
   limit: number;
   pages: number;
   pollingTimeout: number;
+  initialGenerations?: ImageGeneration[];
 };
 
 export const useAccount = ({
@@ -123,13 +126,14 @@ export const useAccount = ({
   limit,
   pages,
   pollingTimeout,
+  initialGenerations,
 }: UseAccountProps): UseAccountReturnType => {
   const [userInfo, setUserInfo] = React.useState<UserInfo | null>(null);
   const [userError, setUserError] = React.useState<boolean>(false);
 
   const storedGenerations = React.useRef<ImageGeneration[]>([]);
   const { generations, generationsError, generationsLoading, reset } =
-    useGenerationFetching({ token, limit, pages, userInfo });
+    useGenerationFetching({ token, limit, pages, userInfo, initialGenerations });
 
   const { getModelById } = usePlatformModels(token);
 
@@ -152,9 +156,9 @@ export const useAccount = ({
       });
   }, [token]);
 
-  // React.useEffect(() => {
-  //   reset();
-  // }, [pollingTime]);
+  React.useEffect(() => {
+    reset();
+  }, [pollingTime]);
 
   const mergedGenerations = mergeGenerations(
     storedGenerations.current,

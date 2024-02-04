@@ -20,14 +20,31 @@ const Header = ({
   isUserLoading,
 }: Props) => {
   return (
-    <div className="bg-blue-500 p-4 text-white flex justify-between items-center">
+    <div
+      className="bg-blue-500 p-4 text-white flex justify-between items-center"
+      style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: 'rgb(38, 108, 220)',
+        height: 72,
+        padding: 16,
+        boxSizing: 'border-box',
+      }}
+    >
       <div className="w-14 grow flex items-center">
         {isUserLoading ? (
-          <DotsLoader />
+          <>
+            <div className="mr-4 w-12">
+              <DotsLoader />
+            </div>
+            <div className="text-white">User loading...</div>
+          </>
         ) : (
-          <div className='text-xl'>
+          <div className="text-xl">
             {userName}
-            <span className='ml-4 text-sm text-indigo-200'>{`${subscriptionTokens} tokens`}</span>
+            <span className="ml-4 text-sm text-indigo-200">{`${subscriptionTokens} tokens`}</span>
           </div>
         )}
       </div>
@@ -36,13 +53,16 @@ const Header = ({
           className="bg-blue-400 hover:bg-blue-300 disabled:bg-grey-400 w-full py-3 rounded-md"
           onClick={onRefresh}
           disabled={isLoading}
+          style={{ backgroundColor: 'rgb(96 165 250)' }}
         >
           {isLoading ? (
             <div className="flex w-30 justify-end items-center">
               <div className="mr-4 w-12">
                 <DotsLoader />
               </div>
-              <div>Refresh</div>
+              <div className="text-white" style={{ color: 'white' }}>
+                Refreshing...
+              </div>
             </div>
           ) : (
             <div className="flex w-30 justify-end items-center">
@@ -51,7 +71,7 @@ const Header = ({
                   <LoadRecIcon />
                 </div>
               </div>
-              <div>Refresh</div>
+              <div className="text-white">Refresh</div>
             </div>
           )}
         </Button>

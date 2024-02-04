@@ -45,7 +45,7 @@ export const useOptimisticJobs = (token: string): UseOptimisticReturn => {
       });
       return newJobs;
     });
-    if (!timing || result.status === GenerationStatus.Complete) {
+    if (!timing || result?.status === GenerationStatus.Complete) {
       return;
     }
     setTimeout(() => jobPolling(ind + 1, jobId), timing * 1000);

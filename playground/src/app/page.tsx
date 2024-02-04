@@ -1,8 +1,19 @@
-'use client';
-import { Gallery } from 'leonardo-ai-gallery';
+import {
+  Gallery,
+  fetchGenerationsByUserId,
+  fetchUserInfo,
+} from 'leonardo-ai-gallery';
+import 'leonardo-ai-gallery/dist/styles.css'
 
 const token = process.env.NEXT_PUBLIC_LEONARDO_API_TOKEN;
 
-export default function Home() {
-  return <Gallery token={token!} pages={3} limit={3}/>;
+export default async function Home() {
+  const user = await fetchUserInfo(token!);
+  const generations = await fetchGenerationsByUserId({
+    token: token!,
+    offset: 0,
+    limit: 9,
+    userId: user.user.id,
+  });
+  return <Gallery token={token!} pages={3} limit={3} serverFetchedGenerations={generations}/>;
 }
