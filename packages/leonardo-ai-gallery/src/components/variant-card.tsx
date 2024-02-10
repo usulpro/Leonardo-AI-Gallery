@@ -269,13 +269,13 @@ export function VariantCard({
           </div>
         )}
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-          <Button className="m-2 bg-white text-black rounded-full p-8">
+          <Button className="m-2 bg-gray-600 bg-opacity-70 text-black rounded-full p-8 hover:bg-opacity-90 hover:bg-gray-500">
             <ExpandIcon className="mx-auto" />
           </Button>
-          <Button className="m-2 bg-white text-black absolute top-0 left-0">
+          <Button className="m-2 bg-gray-600 bg-opacity-70 text-black absolute top-0 left-0 hover:bg-opacity-90 hover:bg-gray-500">
             Action 1
           </Button>
-          <Button className="m-2 bg-white text-black absolute top-0 right-0">
+          <Button className="m-2 bg-gray-600 bg-opacity-70 text-black absolute top-0 right-0 hover:bg-opacity-90 hover:bg-gray-500">
             Action 2
           </Button>
         </div>
