@@ -1,4 +1,6 @@
 import React from 'react';
+import { SquareLoader } from './ui/skeletons';
+import { TransformType, transformsMap } from '../model';
 
 type ImageSizeSettings = {
   maxHeight: number;
@@ -57,9 +59,10 @@ type Props = {
   alt: string;
   imageHeight: number;
   imageWidth: number;
+  transformType: TransformType;
 };
 
-export const ImageHolder = ({ alt, src, imageHeight, imageWidth }: Props) => {
+export const ImageHolder = ({ alt, src, imageHeight, imageWidth, transformType }: Props) => {
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const imgRef = React.useRef<HTMLImageElement>(null);
 
@@ -90,14 +93,15 @@ export const ImageHolder = ({ alt, src, imageHeight, imageWidth }: Props) => {
         }}
         loading="lazy"
         onLoad={() => {
-          setTimeout(() => setIsLoaded(true), 500);
+          setTimeout(() => setIsLoaded(true), 100);
         }}
       />
-      {isLoaded ? null : (
-        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-slate-800 opacity-80">
-          <div>Loading...</div>
-        </div>
-      )}
+      <div
+        className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-slate-800 transition-opacity"
+        style={{ opacity: isLoaded ? 0 : 1 }}
+      >
+        <SquareLoader color={transformsMap[transformType].color} />
+      </div>
     </div>
   );
 };

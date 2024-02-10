@@ -262,6 +262,7 @@ export function VariantCard({
             alt={transformsMap[variation.transformType].header}
             imageWidth={imageWidth}
             imageHeight={imageHeight}
+            transformType={variation.transformType}
           />
         ) : (
           <div className="w-full h-[200px] flex justify-center items-center overflow-hidden">

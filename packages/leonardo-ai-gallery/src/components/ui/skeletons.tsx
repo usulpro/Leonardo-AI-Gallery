@@ -101,3 +101,18 @@ export const DotsLoader = () => {
     </div>
   );
 };
+
+export const SquareLoader = ({
+  color = 'gray',
+}: {
+  color?: string;
+}) => {
+  return (
+    <div className="w-12 h-12">
+      <div
+        className="rounded-md h-12 w-12 border-4 border-t-4 animate-spin absolute"
+        style={{ borderColor: color }}
+      />
+    </div>
+  );
+};
