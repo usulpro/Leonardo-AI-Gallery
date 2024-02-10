@@ -144,14 +144,15 @@ const VariationsRow = ({
   variations: ImageVariation[];
   type: TransformType | null;
   activeVariation: ImageVariation;
-  onActive: (v: ImageVariation) => void;
+  onActive: (v: ImageVariation, ind: number) => void;
   onStart: (t: TransformType) => void;
 }) => {
   if (!type) {
     return null;
   }
 
-  const handleActivate = (v: ImageVariation) => () => onActive(v);
+  const handleActivate = (v: ImageVariation, ind: number) => () =>
+    onActive(v, ind);
   const handleStart = () => {
     onStart(type);
   };
@@ -170,7 +171,7 @@ const VariationsRow = ({
           title={`${transformsMap[type].prefix}${ind + 1}`}
           type={type}
           isActive={activeVariation.id === v.id}
-          onActivate={handleActivate(v)}
+          onActivate={handleActivate(v, ind + 1)}
           status={v.status}
         />
       ))}
@@ -192,6 +193,7 @@ type VariantCardProps = {
   optimistic: UseOptimisticReturn;
   imageHeight?: number;
   imageWidth?: number;
+  promptTitle: string;
 };
 
 export function VariantCard({
@@ -201,13 +203,16 @@ export function VariantCard({
   generationId,
   imageHeight = 512,
   imageWidth = 768,
+  promptTitle,
 }: VariantCardProps) {
   const [variation, setVariation] = React.useState<ImageVariation>(
     variations.plain[0],
   );
+  const [variationInd, setVariationInd] = React.useState<number>(0);
 
-  const handleSetActive = (v: ImageVariation) => {
+  const handleSetActive = (v: ImageVariation, ind: number) => {
     setVariation(v);
+    setVariationInd(ind);
   };
 
   const handleGenerateVariation = async (type: TransformType) => {
@@ -235,50 +240,35 @@ export function VariantCard({
     <Card
       className=" bg-gray-800 text-white"
       style={{
-        // width: 320,
         borderWidth: '3px',
         borderStyle: 'solid',
         borderImage:
           'linear-gradient(216deg, rgb(121 29 118), rgb(0, 65, 195)) 1 / 1 / 0 stretch',
       }}
     >
-      <CardHeader className="flex justify-between flex-row align-baseline p-4 border-b border-gray-700">
+      <CardHeader className="flex justify-between flex-row align-baseline p-2 border-b border-gray-700">
         <div className="flex items-center space-x-2">
-          <span className="text-lg">
+          <span className="text-md">
             {transformsMap[variation.transformType].icon}
           </span>
-          <span>{transformsMap[variation.transformType].header}</span>
+          <span className="text-xs">
+            {transformsMap[variation.transformType].header}
+            {variationInd > 0 ? <span>{` [${variationInd}]`}</span> : null}
+          </span>
         </div>
         <div className="flex items-center space-x-2 ml-auto">
-          <UploadIcon className="text-blue-500" />
-          <span>Uploaded</span>
+          {/* <UploadIcon className="text-blue-500" /> */}
+          {/* <span className="text-xs">Uploaded</span> */}
         </div>
       </CardHeader>
       <CardContent className="relative group p-0">
-        {variation.status === GenerationStatus.Complete ? (
-          <ImageHolder
-            key={variation.url}
-            src={variation.url}
-            alt={transformsMap[variation.transformType].header}
-            imageWidth={imageWidth}
-            imageHeight={imageHeight}
-          />
-        ) : (
-          <div className="w-full h-[200px] flex justify-center items-center overflow-hidden">
-            <ImageSkeleton />
-          </div>
-        )}
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-          <Button className="m-2 bg-white text-black rounded-full p-8">
-            <ExpandIcon className="mx-auto" />
-          </Button>
-          <Button className="m-2 bg-white text-black absolute top-0 left-0">
-            Action 1
-          </Button>
-          <Button className="m-2 bg-white text-black absolute top-0 right-0">
-            Action 2
-          </Button>
-        </div>
+        <ImageHolder
+          key={variation.url}
+          variation={variation}
+          imageHeight={imageHeight}
+          imageWidth={imageWidth}
+          title={promptTitle}
+        />
       </CardContent>
       {/* <div className={`bg-gray-700 h-3 w-full border-b-2 ${tabBorderColor}`} /> */}
       <CardFooter
@@ -288,7 +278,10 @@ export function VariantCard({
         <VarianButton
           type={TransformType.ORIGIN}
           isActive={variation.id === variations.sorted.original.id}
-          onActivate={() => setVariation(variations.sorted.original)}
+          onActivate={() => {
+            setVariation(variations.sorted.original);
+            setVariationInd(0);
+          }}
           status={GenerationStatus.Pending}
           // status1
           // status2

@@ -45,6 +45,7 @@ export function Generation(
               variations={sortVariations(image)}
               token={props.token}
               optimistic={props.optimistic}
+              promptTitle={promptTitle}
             />
           ))}
         </div>
