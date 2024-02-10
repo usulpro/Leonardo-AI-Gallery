@@ -170,31 +170,38 @@ export const ImageHolder = ({
           >
             <SquareLoader color={color} />
           </div>
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
+            <a
+              className="m-2 rounded-full p-8 bg-gray-900 bg-opacity-70 text-gray-400 hover:bg-opacity-80 hover:bg-gray-800 hover:text-gray-100"
+              href={variation.url}
+              target="_blank"
+            >
+              <ExpandIcon className="mx-auto" />
+            </a>
+            <Button className="absolute top-0 left-0 m-2 bg-gray-900 bg-opacity-70 text-gray-400 hover:bg-opacity-80 hover:bg-gray-800 hover:text-gray-100">
+              Action 1
+            </Button>
+            <Button className="absolute top-0 right-0 m-2 bg-gray-900 bg-opacity-70 text-gray-400 hover:bg-opacity-80 hover:bg-gray-800 hover:text-gray-100">
+              Action 2
+            </Button>
+            <Button
+              disabled={isDownloading}
+              className="m-2 p-4 absolute right-0 bottom-0 bg-gray-900 bg-opacity-70 opacity-70 hover:bg-opacity-80 hover:bg-gray-800 hover:opacity-100 disabled:hover:opacity-40 disabled:animate-pulse"
+              onClick={handleDownload}
+              title="Download image"
+            >
+              <DnArrow color={isDownloading ? 'gray' : color} />
+            </Button>
+          </div>
         </div>
       ) : (
-        <div className="w-full h-[200px] flex justify-center items-center overflow-hidden">
-          <ImageSkeleton />
+        <div
+          className="w-full h-full flex justify-center items-center overflow-hidden"
+          style={{ width: sizes.width, height: sizes.height }}
+        >
+          <ImageSkeleton color={color} />
         </div>
       )}
-      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button className="m-2 rounded-full p-8 bg-gray-900 bg-opacity-70 text-gray-400 hover:bg-opacity-80 hover:bg-gray-800 hover:text-gray-100">
-          <ExpandIcon className="mx-auto" />
-        </Button>
-        <Button className="absolute top-0 left-0 m-2 bg-gray-900 bg-opacity-70 text-gray-400 hover:bg-opacity-80 hover:bg-gray-800 hover:text-gray-100">
-          Action 1
-        </Button>
-        <Button className="absolute top-0 right-0 m-2 bg-gray-900 bg-opacity-70 text-gray-400 hover:bg-opacity-80 hover:bg-gray-800 hover:text-gray-100">
-          Action 2
-        </Button>
-        <Button
-          disabled={isDownloading}
-          className="m-2 p-4 absolute right-0 bottom-0 bg-gray-900 bg-opacity-70 opacity-70 hover:bg-opacity-80 hover:bg-gray-800 hover:opacity-100 disabled:hover:opacity-40 disabled:animate-pulse"
-          onClick={handleDownload}
-          title="Download image"
-        >
-          <DnArrow color={isDownloading ? 'gray' : color} />
-        </Button>
-      </div>
     </>
   );
 };
