@@ -7,7 +7,7 @@ import { CardHeader, CardContent, CardFooter, Card } from './ui/card';
 import { ImageHolder } from './imageHolder';
 import { Button } from './ui/button';
 import { ImageSkeleton, SmallSpinner } from './ui/skeletons';
-import { ExpandIcon, SmileIcon, UploadIcon } from './icons/v0';
+import { ExpandIcon, UploadIcon } from './icons/v0';
 import {
   GenerationStatus,
   ImageVariation,
@@ -118,7 +118,6 @@ const VarianButton = ({
 
 const AddVariationButton = ({
   title,
-  type,
   onStart,
 }: {
   title: string;
@@ -201,7 +200,7 @@ export function VariantCard({
   optimistic,
   generationId,
   imageHeight = 512,
-  imageWidth =  768,
+  imageWidth = 768,
 }: VariantCardProps) {
   const [variation, setVariation] = React.useState<ImageVariation>(
     variations.plain[0],

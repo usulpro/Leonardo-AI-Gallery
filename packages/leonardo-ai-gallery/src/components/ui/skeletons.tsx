@@ -7,7 +7,10 @@ export const ImageSkeleton = ({ color }: { color?: string }) => {
       role="status"
       className="space-y-8 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center w-full h-full"
     >
-      <div className="flex items-center justify-center w-full h-48 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
+      <div
+        className="flex items-center justify-center w-full h-48 bg-gray-300 rounded sm:w-96 dark:bg-gray-700"
+        style={{ backgroundColor: color }}
+      >
         <svg
           className="w-10 h-10 text-gray-200 dark:text-gray-600"
           aria-hidden="true"
@@ -87,8 +90,14 @@ export const DotsLoader = () => {
   return (
     <div className="flex flex-row gap-2">
       <div className="w-2 h-2 rounded-full bg-violet-600 animate-bounce"></div>
-      <div className="w-2 h-2 rounded-full bg-violet-600 animate-bounce" style={{ animationDelay: "-.3s" }}></div>
-      <div className="w-2 h-2 rounded-full bg-violet-600 animate-bounce" style={{ animationDelay: "-.5s" }}></div>
+      <div
+        className="w-2 h-2 rounded-full bg-violet-600 animate-bounce"
+        style={{ animationDelay: '-.3s' }}
+      ></div>
+      <div
+        className="w-2 h-2 rounded-full bg-violet-600 animate-bounce"
+        style={{ animationDelay: '-.5s' }}
+      ></div>
     </div>
   );
 };

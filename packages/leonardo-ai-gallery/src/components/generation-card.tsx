@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
-import { CheckCircleIcon, PencilIcon } from './icons/v0';
-import { ImageGeneration, ProcessedGeneration } from '../model';
+import { PencilIcon } from './icons/v0';
+import { ProcessedGeneration } from '../model';
 
 export const GenerationCardDefaultProps = {
   promptTitle: 'Create a round thumbnail...',
@@ -144,12 +144,12 @@ export function GenerationCard({
           color: 'white',
         }}
       />
-      {/* <Textarea
+      {currentNegativePrompt && <Textarea
         className="bg-[#4d4d4d] text-gray-400 mb-4"
         placeholder="nsfw, nude, nudity, text"
         value={currentNegativePrompt}
         onChange={(e) => setNegativePrompt(e.target.value)}
-      /> */}
+      />}
       <Button
         className="bg-blue-500 hover:bg-blue-600 w-full py-3 rounded-md"
         onClick={handleRegenerate}

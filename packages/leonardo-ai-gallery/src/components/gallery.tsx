@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-// @ts-ignore
+// @ts-expect-error this is old package
 import insertCss from 'insert-css';
 import styles from '../styles.js';
 import { Generation } from './generation';

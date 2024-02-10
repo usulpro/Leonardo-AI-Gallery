@@ -89,7 +89,6 @@ const useGenerationFetching = ({
   }, [userInfo?.user?.id, offset]);
 
   const reset = () => {
-    console.log('🚀 ~ reset ~ reset:');
     setOffset(0);
     setGenerations([]);
   };
@@ -226,10 +225,10 @@ function processGenerations({
         .map((im) => ({
           ...im,
           generated_image_variation_generics:
-            // @ts-ignore // Note: doesn't TS know `toReversed`?
+            // @ts-expect-error // Note: doesn't TS know `toReversed`?
             im.generated_image_variation_generics.toReversed(),
         }))
-        // @ts-ignore
+        // @ts-expect-error toReversed
         .toReversed(),
     };
   });

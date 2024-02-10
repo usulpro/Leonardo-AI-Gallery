@@ -77,8 +77,8 @@ export type ImageGeneration = {
   promptMagicStrength: number;
   photoReal: boolean;
   photoRealStrength: number | null;
-  fantasyAvatar: any | null; // Update as per the actual structure
-  generation_elements: any[]; // Update as per the actual structure
+  fantasyAvatar: unknown | null; // Update as per the actual structure
+  generation_elements: unknown[]; // Update as per the actual structure
 };
 
 export type ProcessedGeneration = Optional<ImageGeneration> & {

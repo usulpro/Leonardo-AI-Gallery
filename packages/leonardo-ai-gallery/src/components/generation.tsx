@@ -3,16 +3,15 @@
  * @see https://v0.dev/t/azbQ0q7MBtW
  */
 import React from 'react';
-import { CardTitle, CardHeader, CardContent, Card } from './ui/card';
 import { GenerationCard } from './generation-card';
 import { VariantCard } from './variant-card';
-import { ImageGeneration, ProcessedGeneration, sortVariations } from '../model';
+import { ProcessedGeneration, sortVariations } from '../model';
 import { UseOptimisticReturn } from './lib/optimistic';
 
 export function Generation(
   props: ProcessedGeneration & { optimistic: UseOptimisticReturn },
 ) {
-  const { generated_images, ...restProps } = props;
+  const { generated_images } = props;
   const promptStart = (props?.prompt || '').slice(0, 26);
   const promptTitle =
     promptStart.length < (props?.prompt?.length || 0)
@@ -35,9 +34,7 @@ export function Generation(
           publicImage={props.public || false}
           onRegenerate={handleRegenerate}
         />
-        <div
-          className="flex flex-row flex-wrap gap-4"
-        >
+        <div className="flex flex-row flex-wrap gap-4">
           {(generated_images || []).map((image) => (
             <VariantCard
               key={image.id}
