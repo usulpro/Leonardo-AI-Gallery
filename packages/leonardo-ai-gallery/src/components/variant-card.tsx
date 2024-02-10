@@ -192,6 +192,7 @@ type VariantCardProps = {
   optimistic: UseOptimisticReturn;
   imageHeight?: number;
   imageWidth?: number;
+  promptTitle: string;
 };
 
 export function VariantCard({
@@ -201,6 +202,7 @@ export function VariantCard({
   generationId,
   imageHeight = 512,
   imageWidth = 768,
+  promptTitle,
 }: VariantCardProps) {
   const [variation, setVariation] = React.useState<ImageVariation>(
     variations.plain[0],
@@ -255,31 +257,13 @@ export function VariantCard({
         </div>
       </CardHeader>
       <CardContent className="relative group p-0">
-        {variation.status === GenerationStatus.Complete ? (
-          <ImageHolder
-            key={variation.url}
-            src={variation.url}
-            alt={transformsMap[variation.transformType].header}
-            imageWidth={imageWidth}
-            imageHeight={imageHeight}
-            transformType={variation.transformType}
-          />
-        ) : (
-          <div className="w-full h-[200px] flex justify-center items-center overflow-hidden">
-            <ImageSkeleton />
-          </div>
-        )}
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-          <Button className="m-2 bg-gray-600 bg-opacity-70 text-black rounded-full p-8 hover:bg-opacity-90 hover:bg-gray-500">
-            <ExpandIcon className="mx-auto" />
-          </Button>
-          <Button className="m-2 bg-gray-600 bg-opacity-70 text-black absolute top-0 left-0 hover:bg-opacity-90 hover:bg-gray-500">
-            Action 1
-          </Button>
-          <Button className="m-2 bg-gray-600 bg-opacity-70 text-black absolute top-0 right-0 hover:bg-opacity-90 hover:bg-gray-500">
-            Action 2
-          </Button>
-        </div>
+        <ImageHolder
+          key={variation.url}
+          variation={variation}
+          imageHeight={imageHeight}
+          imageWidth={imageWidth}
+          title={promptTitle}
+        />
       </CardContent>
       {/* <div className={`bg-gray-700 h-3 w-full border-b-2 ${tabBorderColor}`} /> */}
       <CardFooter
